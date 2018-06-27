@@ -11,7 +11,7 @@ CMD_SRCS += \
 C_SRCS += \
 ../main.c \
 ../tm4c123gh6pm_startup_ccs.c \
-C:/ti/TivaWare_C_Series-2.1.4.178/utils/uartstdio.c 
+C:/Users/arody/Documents/ti/TivaWare_C_Series-2.1.4.178/utils/uartstdio.c 
 
 C_DEPS += \
 ./main.d \
@@ -36,6 +36,6 @@ C_DEPS__QUOTED += \
 C_SRCS__QUOTED += \
 "../main.c" \
 "../tm4c123gh6pm_startup_ccs.c" \
-"C:/ti/TivaWare_C_Series-2.1.4.178/utils/uartstdio.c" 
+"C:/Users/arody/Documents/ti/TivaWare_C_Series-2.1.4.178/utils/uartstdio.c" 
 
 
