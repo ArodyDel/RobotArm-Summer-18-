@@ -8,6 +8,8 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
+#define X 9
+#define O 10
 #define HEADER 0x55
 #define L3 0x2c
 #define H3 0x01
