@@ -7,7 +7,6 @@
 #include "inc/hw_gpio.h"
 #include "inc/hw_types.h"
 #include "inc/hw_memmap.h"
-
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/pin_map.h"
@@ -79,9 +78,7 @@ void onButtonDown(void) {
 
         if(count == 8){count = -1;}
         if(gameBoard[count + 1] == -1){
-
             count++;
-
         }
         else{
             int i = 0;

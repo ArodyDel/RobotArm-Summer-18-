@@ -8,15 +8,18 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
-#define pos0 0
-#define pos1 1
-#define pos2 2
-#define pos3 3
-#define pos4 4
-#define pos5 5
-#define pos6 6
-#define pos7 7
-#define pos8 8
+#define SHORTDELAY 7500000
+#define MEDDELAY 15000000
+#define LONGDELAY 25000000
+#define POS0 0
+#define POS1 1
+#define POS2 2
+#define POS3 3
+#define POS4 4
+#define POS5 5
+#define POS6 6
+#define POS7 7
+#define POS8 8
 #define X 9
 #define O 10
 #define HEADER 0x55
