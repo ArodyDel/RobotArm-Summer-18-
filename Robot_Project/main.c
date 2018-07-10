@@ -24,6 +24,12 @@ int coinFlip(void);
 void placePiece(int);
 int determine_winner(void);
 void print_winner(void);
+void humanTurn(void)
+int whereCanRobotWin(void);
+int whereCanHumanWin(void);
+void gameOver(void);
+void initializeGameBoard(void);
+
 extern void movement_setup(void);
 extern void moveBlock(int position);
 extern void get_block_from_slide(int);
@@ -37,6 +43,7 @@ int humanTurnDone = 0;
 int gameBoard[9] = {-1, -1, -1,
                     -1, -1, -1,
                     -1, -1, -1};
+int startNewGameSelected = 0;
 
 int main(void)
 {
@@ -44,24 +51,146 @@ int main(void)
     button_setup();
     movement_setup();
 
-    while(1){
+//     while(1){
 
-    }
+//     }
 
-//    robotWonFlip = coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
-//
-//    if(robotWonFlip){
-//
-//       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
-//           placePiece(pos4);
-//       }
-//       else{ // robot plays first X in position 0 (upper left corner of gameBoard)
-//           placePiece(pos0);
-//       }
-//       while(!humanTurnDone) //wait on human to take their turn
-//
-//       }
-//    }
+    robotWonFlip = coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
+
+    if(robotWonFlip){
+
+       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
+           placePiece(pos4);//turn 1
+           humanTurn(); //turn 2
+           int humanTurn2Pos=0;
+           humanTurn2Pos=count;
+
+          if(humanTurn2Pos==(0||2||6||8))
+          {
+            if(humanTurn2Pos==8)
+            {
+            placePiece(pos0);
+            }
+            else
+            {
+            placePiece(humanTurn2Pos+2);
+            }
+            humanTurn();//turn4
+            int humanTurn4Pos=0;
+            humanTurn4Pos=count;
+
+
+
+
+          }
+
+          else
+          {
+            placePiece(pos8);
+          }
+         humanTurn()//turn 4;
+         int check=whereCanPlayerWin(X);
+         if(check!=-1)
+         {
+           placePiece(whereCanPlayerWin(X));
+         }
+         check=whereCanPlayerWin(O);
+         if(check!=-1)
+         {
+           placePiece(whereCanPlayerWin(O));
+         }
+         humanTurn()//turn 6
+         check=whereCanPlayerWin(X);
+         if(check!=-1)
+         {
+           placePiece(whereCanPlayerWin(X));
+         }
+         //gameover
+
+
+       }
+       else{ // robot plays first X in position 0 (lower left corner of gameBoard)
+
+           placePiece(pos6);//turn 1
+           humanTurn();
+           int humanTurn2Pos=0;
+           humanTurn2Pos=count;
+
+
+            if(humanTurn2Pos==1||humanTurn2Pos==7||humanTurn2Pos=8)) //turn 2 played position 1,7,or8
+               {
+
+                   placePiece(pos0);
+                   humanTurn();
+                    //check can i win
+                 //if true
+                 if(gameBoard[3]!=O)
+                 {
+                   placePiece(pos3);
+                   //gameover
+                 }
+
+                 //if not true
+                  else{ placePiece(pos8);}
+                   humanTurn();
+                   if(gameBoard[4]==O)
+                   {
+                   placePiece(pos7);
+                   }
+                   else{placePiece(pos4);}
+                   //gameover
+
+               }
+               else if(humanTurn2Pos==4)) //turn 2 played center
+               {
+                   placePiece(4);//turn3
+                   humanTurn();//turn4
+                   if(gameBoard[0]==O)
+                   {
+                     placePiece(8);
+                   }
+                   else if(gameBoard[8]==O)
+                   {
+                     placePiece(0);
+                   }
+                   else
+                   {
+                     //block human
+                     placePiece(whereCanPlayerWin(O));
+                   }
+                   humanTurn();//turn 6
+                   placePiece(whereCanPlayerWin(X));
+                   placePiece(whereCanPlayerWin(O));
+
+                   humanTurn();//turn8
+                   placePiece(whereCanPlayerWin(X));
+                   placePiece(whereCanPlayerWin(O));
+                  //gameover
+
+               }
+               else //turn 2 played any other spot
+               {
+                   placePiece(pos8);//turn 3
+                   humanTurn();//turn 4
+                  //check can i win
+
+                 //if true
+                 if(gameBoard[7]!=O)
+                 {
+                   placePiece(pos7);//turn 5
+                   //gameover
+                 }
+
+                 //if not true
+                   placePiece(pos2);//turn 5
+                   humanTurn();//turn 6
+                   if(gameBoard[4]==O)
+                   {
+                   placePiece(pos5);//turn 7
+                   }
+                   placePiece(pos4);//turn 7
+                   //gameover
+   }
 
     return 0;
 }
@@ -154,7 +283,7 @@ void onButtonDown(void) {
             break;
         }
 
-        GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+        //GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
         SysCtlDelay(4000000); //delay
         GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_4);  // Clear interrupt flag
 
@@ -172,7 +301,7 @@ void onButtonDown(void) {
             humanTurnDone = 1;
         }
 
-        GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+        //GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
         SysCtlDelay(4000000);
         GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_0);  // Clear interrupt flag
 
@@ -224,6 +353,15 @@ void print_winner(void){
   else{printf("%d\n", determine_winner());}
 }
 
+
+void humanTurn(void){
+    GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+    while(!humanTurnDone){ //wait on human to take their turn
+
+    }
+    humanTurnDone=0;     // reset flag
+}
+
 int determine_winner(void){
 
     int i;
@@ -240,7 +378,7 @@ int determine_winner(void){
             if(gameBoard[i] == gameBoard[i + 3] && gameBoard[i + 3] == gameBoard[i + 6] && gameBoard[i] != -1){
                 winner = gameBoard[i];
             }
-        }
+    }
 
     // check diagonals of gameBoard (2)
     if(gameBoard[0] == gameBoard[4] && gameBoard[4] == gameBoard[8] && gameBoard[0] != -1){
@@ -248,7 +386,58 @@ int determine_winner(void){
     }
     if(gameBoard[2] == gameBoard[4] && gameBoard[4] == gameBoard[6] && gameBoard[2] != -1){
             winner = gameBoard[2];
-        }
+    }
 
     return winner;
+}
+
+// Returns position 0-8 where X can win by playing an X or -1 if there is no winning move
+int whereCanPlayerWin(int player){
+  if(player != X && player != O) {return NO_WINNER;} // reject invalid argument
+  int i, j;
+  int winningPosition = NO_WINNER;
+  // check rows of gameBoard (3)
+  for(i = 0; i < 3; i++){
+    if(gameBoard[3*i] + gameBoard[3*i+1] + gameBoard[3*i+2] == (2 * player - 1)){ // There are two Xs and one -1 in this row
+      for(j = 3*i; j < 3*i + 3; j++){
+        if(gameBoard[j] == -1){ winningPosition = j;}
+      }
+    }
+  }
+
+  // check columns of gameBoard (3)
+  for(i = 0; i < 3; i++){
+    if(gameBoard[i] + gameBoard[i + 3] + gameBoard[i + 6] == (2 * player - 1)){
+      for(j = i; j < i + 7; j += 3){
+        if(gameBoard[j] == -1){ winningPosition = j; }
+      }
+    }
+  }
+
+  // check diagonals of gameBoard (2)
+  if(gameBoard[0] + gameBoard[4] + gameBoard[8] == (2 * player - 1)){
+    for(j = 0; j < 9; j += 4){
+      if(gameBoard[j] == -1){ winningPosition = j; }
+    }
+  }
+  if(gameBoard[2] + gameBoard[4] + gameBoard[6] == (2 * player - 1)){
+    for(j = 2; j < 7; j += 2){
+      if(gameBoard[j] == -1){ winningPosition = j; }
+    }
+  }
+
+  return winningPosition;
+}
+
+void gameOver(void){
+  while(!startNewGameSelected){
+
+  }
+}
+
+void initializeGameBoard(void){
+  int i;
+  for(i = 0; i < 9; i++){
+    gameBoard[i] = -1;
+  }
 }
