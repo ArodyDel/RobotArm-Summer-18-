@@ -1,16 +1,20 @@
 /*
- * constants.h
+ *  constants.h
  *
  *  Created on: Jun 29, 2018
- *      Author: Ian Wilson, Arody Deleon
+ *  Author: Ian Wilson, Arody Deleon
+ *
  */
 
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
+// Time delays
 #define SHORTDELAY 7500000
 #define MEDDELAY 15000000
 #define LONGDELAY 25000000
+
+// Board positions and player designations
 #define POS0 0
 #define POS1 1
 #define POS2 2
@@ -22,6 +26,9 @@
 #define POS8 8
 #define X 9
 #define O 10
+#define NO_WINNER -1
+
+// Servo angles for robot movement
 #define HEADER 0x55
 #define L3 0x2c
 #define H3 0x01
@@ -102,6 +109,7 @@
 #define L25 0xc4
 #define H25 0x09
 
+// Servo movement durations
 #define TIME_500_LO 0xf4
 #define TIME_500_HI 0x01
 #define TIME_1000_LO 0xe8

@@ -138,6 +138,9 @@ void move(char* c){
  *      |  6   |  7   |  8   |
  *      ----------------------
  *
+ *  Each case below moves six servos one-by-one to position the robot and either pick up (POS0 through POS8) or
+ *  place a block (X, O).
+ *
  */
 void moveBlock(int position){
     switch(position){

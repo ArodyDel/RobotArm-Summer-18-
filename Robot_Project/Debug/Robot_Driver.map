@@ -1,34 +1,35 @@
 ******************************************************************************
                   TI ARM Linker PC v18.1.2                     
 ******************************************************************************
->> Linked Mon Jul  9 22:24:14 2018
+>> Linked Tue Jul 10 12:33:23 2018
 
 OUTPUT FILE NAME:   <Robot_Driver.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 0000163d
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00003c81
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  00001cb2  0003e34e  R  X
-  SRAM                  20000000   00008000  00000910  000076f0  RW X
+  FLASH                 00000000   00040000  000046c4  0003b93c  R  X
+  SRAM                  20000000   00008000  00000b9c  00007464  RW X
 
 
 SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    00001cb8   00001cb8    r-x
+00000000    00000000    000046c8   000046c8    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    00001646   00001646    r-x .text
-  000018b4    000018b4    000002e0   000002e0    r-- .const
-  00001b98    00001b98    00000120   00000120    r-- .cinit
-20000000    20000000    00000910   00000000    rw-
+  0000026c    0000026c    00003ef4   00003ef4    r-x .text
+  00004160    00004160    000003e4   000003e4    r-- .const
+  00004548    00004548    00000180   00000180    r-- .cinit
+20000000    20000000    00000ba0   00000000    rw-
   20000000    20000000    0000026c   00000000    rw- .vtable
-  2000026c    2000026c    0000037c   00000000    rw- .data
-  200005e8    200005e8    00000200   00000000    rw- .stack
-  200007e8    200007e8    00000128   00000000    rw- .bss
+  2000026c    2000026c    00000560   00000000    rw- .data
+  200007d0    200007d0    00000200   00000000    rw- .stack
+  200009d0    200009d0    000001c8   00000000    rw- .bss
+  20000b98    20000b98    00000008   00000000    rw- .sysmem
 
 
 SECTION ALLOCATION MAP
@@ -39,77 +40,150 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    0000026c     
                   00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
 
-.text      0    0000026c    00001646     
-                  0000026c    00000614     movement.obj (.text)
-                  00000880    0000049c     uartstdio.obj (.text)
-                  00000d1c    00000324     main.obj (.text)
-                  00001040    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
-                  00001172    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.c.obj (.text:_nop)
-                  00001174    000000f4     driverlib.lib : sysctl.obj (.text:SysCtlClockSet)
-                  00001268    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
-                  00001304    00000068     driverlib.lib : interrupt.obj (.text:IntEnable)
-                  0000136c    00000068     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  000013d4    00000056     driverlib.lib : gpio.obj (.text:GPIOIntTypeSet)
-                  0000142a    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : div0.asm.obj (.text)
-                  0000142c    00000048     driverlib.lib : gpio.obj (.text:GPIOPinConfigure)
-                  00001474    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : hosttime.c.obj (.text:HOSTtime)
-                  000014bc    00000046     driverlib.lib : uart.obj (.text:UARTConfigSetExpClk)
-                  00001502    00000002     --HOLE-- [fill = 0]
-                  00001504    00000044                   : gpio.obj (.text:_GPIOIntNumberGet)
-                  00001548    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
-                  0000158c    00000040                                   : u_divt2.asm.obj (.text)
-                  000015cc    00000038     driverlib.lib : sysctl.obj (.text:SysCtlPeripheralPresent)
-                  00001604    00000038     rtsv7M4_T_le_v4SPD16_eabi.lib : trgmsg.c.obj (.text:__TI_writemsg)
-                  0000163c    00000038                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
-                  00001674    00000034     driverlib.lib : interrupt.obj (.text:IntRegister)
-                  000016a8    00000034                   : sysctl.obj (.text:SysCtlPeripheralEnable)
-                  000016dc    00000034     rtsv7M4_T_le_v4SPD16_eabi.lib : trgmsg.c.obj (.text:__TI_readmsg)
-                  00001710    00000034                                   : rand.c.obj (.text:rand)
-                  00001744    0000002a     driverlib.lib : gpio.obj (.text:GPIODirModeSet)
-                  0000176e    00000002     --HOLE-- [fill = 0]
-                  00001770    00000024     rtsv7M4_T_le_v4SPD16_eabi.lib : rand.c.obj (.text:srand)
-                  00001794    00000020     driverlib.lib : uart.obj (.text:UARTDisable)
-                  000017b4    00000018                   : gpio.obj (.text:GPIOIntRegister)
-                  000017cc    00000018                   : gpio.obj (.text:GPIOPinTypeGPIOOutput)
-                  000017e4    00000014                   : uart.obj (.text:UARTEnable)
-                  000017f8    00000012                   : gpio.obj (.text:GPIOPinTypeGPIOInput)
-                  0000180a    00000012                   : gpio.obj (.text:GPIOPinTypeUART)
-                  0000181c    00000012     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
-                  0000182e    0000000e     driverlib.lib : gpio.obj (.text:GPIOIntDisable)
-                  0000183c    0000000e                   : gpio.obj (.text:GPIOIntStatus)
-                  0000184a    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : time.c.obj (.text:__time32)
-                  00001858    0000000e                                   : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  00001866    0000000c     driverlib.lib : gpio.obj (.text:GPIOIntEnable)
-                  00001872    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
-                  0000187e    0000000a     driverlib.lib : uart.obj (.text:UARTCharGet)
-                  00001888    0000000a                   : uart.obj (.text:UARTCharPut)
-                  00001892    00000006                   : gpio.obj (.text:GPIOIntClear)
-                  00001898    00000006                   : gpio.obj (.text:GPIOPinWrite)
-                  0000189e    00000006                   : sysctl.obj (.text:SysCtlDelay)
-                  000018a4    00000006                   : uart.obj (.text:UARTClockSourceSet)
-                  000018aa    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  000018ae    00000004                                   : exit.c.obj (.text:abort:abort)
+.text      0    0000026c    00003ef4     
+                  0000026c    00000a5e     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:__TI_printfi)
+                  00000cca    00000002                                   : _lock.c.obj (.text:_nop)
+                  00000ccc    00000614     movement.obj (.text)
+                  000012e0    000004b8     main.obj (.text)
+                  00001798    0000049c     uartstdio.obj (.text)
+                  00001c34    00000270     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_a)
+                  00001ea4    000001d0                                   : _printfi.c.obj (.text:_pconv_g)
+                  00002074    000001b6                                   : fd_add_t2.asm.obj (.text)
+                  0000222a    00000002                                   : div0.asm.obj (.text)
+                  0000222c    0000013c                                   : _printfi.c.obj (.text:_pconv_e)
+                  00002368    00000136                                   : fd_div_t2.asm.obj (.text)
+                  0000249e    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
+                  000025d0    00000120     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:fcvt)
+                  000026f0    00000114                                   : fputs.c.obj (.text:fputs)
+                  00002804    00000110                                   : s_scalbn.c.obj (.text:scalbn)
+                  00002914    000000fc                                   : fd_mul_t2.asm.obj (.text)
+                  00002a10    000000f4     driverlib.lib : sysctl.obj (.text:SysCtlClockSet)
+                  00002b04    000000dc     rtsv7M4_T_le_v4SPD16_eabi.lib : setvbuf.c.obj (.text:setvbuf)
+                  00002be0    000000d8                                   : memory.c.obj (.text:free)
+                  00002cb8    000000b1                                   : _printfi.c.obj (.text:_ltostr)
+                  00002d69    00000001     --HOLE-- [fill = 0]
+                  00002d6a    0000009c                                   : memcpy_t2.asm.obj (.text)
+                  00002e06    00000096                                   : ull_div_t2.asm.obj (.text)
+                  00002e9c    0000008c                                   : fputc.c.obj (.text:fputc)
+                  00002f28    00000086                                   : fd_cmp_t2.asm.obj (.text:__aeabi_cdcmple)
+                  00002fae    00000086                                   : fd_cmp_t2.asm.obj (.text:__aeabi_cdrcmple)
+                  00003034    0000007a                                   : memset_t2.asm.obj (.text)
+                  000030ae    00000002     --HOLE-- [fill = 0]
+                  000030b0    00000078                                   : memory.c.obj (.text:malloc)
+                  00003128    00000074                                   : fclose.c.obj (.text:__TI_closefile)
+                  0000319c    0000006e                                   : _printfi.c.obj (.text:_mcpy)
+                  0000320a    00000002     --HOLE-- [fill = 0]
+                  0000320c    00000068                                   : hostlseek.c.obj (.text:HOSTlseek)
+                  00003274    00000068                                   : hostrename.c.obj (.text:HOSTrename)
+                  000032dc    00000068     driverlib.lib : interrupt.obj (.text:IntEnable)
+                  00003344    00000068     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  000033ac    00000068                                   : printf.c.obj (.text:printf)
+                  00003414    00000064                                   : s_frexp.c.obj (.text:frexp)
+                  00003478    00000064                                   : fseek.c.obj (.text:fseek)
+                  000034dc    00000062                                   : _io_perm.c.obj (.text:__TI_wrt_ok)
+                  0000353e    00000002     --HOLE-- [fill = 0]
+                  00003540    00000060                                   : hostopen.c.obj (.text:HOSTopen)
+                  000035a0    0000005c                                   : close.c.obj (.text:close)
+                  000035fc    00000058                                   : hostread.c.obj (.text:HOSTread)
+                  00003654    00000058                                   : hostwrite.c.obj (.text:HOSTwrite)
+                  000036ac    00000056     driverlib.lib : gpio.obj (.text:GPIOIntTypeSet)
+                  00003702    00000056     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.c.obj (.text:_pconv_f)
+                  00003758    00000054                                   : ltoa.c.obj (.text:ltoa)
+                  000037ac    00000052                                   : _printfi.c.obj (.text:_ecpy)
+                  000037fe    0000004c                                   : fflush.c.obj (.text:__TI_doflush)
+                  0000384a    00000002     --HOLE-- [fill = 0]
+                  0000384c    0000004c                                   : atoi.c.obj (.text:atoi)
+                  00003898    00000048     driverlib.lib : gpio.obj (.text:GPIOPinConfigure)
+                  000038e0    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : hosttime.c.obj (.text:HOSTtime)
+                  00003928    00000048                                   : exit.c.obj (.text:exit)
+                  00003970    00000048                                   : fd_toi_t2.asm.obj (.text)
+                  000039b8    00000046     driverlib.lib : uart.obj (.text:UARTConfigSetExpClk)
+                  000039fe    00000002     --HOLE-- [fill = 0]
+                  00003a00    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : hostclose.c.obj (.text:HOSTclose)
+                  00003a44    00000044                                   : hostunlink.c.obj (.text:HOSTunlink)
+                  00003a88    00000044     driverlib.lib : gpio.obj (.text:_GPIOIntNumberGet)
+                  00003acc    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  00003b10    00000044                                   : getdevice.c.obj (.text:getdevice)
+                  00003b54    00000040                                   : u_divt2.asm.obj (.text)
+                  00003b94    0000003e                                   : _printfi.c.obj (.text:_fcpy)
+                  00003bd2    00000002     --HOLE-- [fill = 0]
+                  00003bd4    0000003c                                   : memory.c.obj (.text:minsert)
+                  00003c10    00000038     driverlib.lib : sysctl.obj (.text:SysCtlPeripheralPresent)
+                  00003c48    00000038     rtsv7M4_T_le_v4SPD16_eabi.lib : trgmsg.c.obj (.text:__TI_writemsg)
+                  00003c80    00000038                                   : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
+                  00003cb8    00000038                                   : memory.c.obj (.text:minit)
+                  00003cf0    00000036                                   : strncpy.c.obj (.text:strncpy)
+                  00003d26    00000002     --HOLE-- [fill = 0]
+                  00003d28    00000034     driverlib.lib : interrupt.obj (.text:IntRegister)
+                  00003d5c    00000034                   : sysctl.obj (.text:SysCtlPeripheralEnable)
+                  00003d90    00000034     rtsv7M4_T_le_v4SPD16_eabi.lib : fopen.c.obj (.text:__TI_cleanup)
+                  00003dc4    00000034                                   : trgmsg.c.obj (.text:__TI_readmsg)
+                  00003df8    00000034                                   : rand.c.obj (.text:rand)
+                  00003e2c    00000030                                   : getdevice.c.obj (.text:finddevice)
+                  00003e5c    0000002e                                   : i_tofd_t2.asm.obj (.text)
+                  00003e8a    00000002     --HOLE-- [fill = 0]
+                  00003e8c    0000002c                                   : unlink.c.obj (.text:unlink)
+                  00003eb8    0000002a     driverlib.lib : gpio.obj (.text:GPIODirModeSet)
+                  00003ee2    00000002     --HOLE-- [fill = 0]
+                  00003ee4    00000028     rtsv7M4_T_le_v4SPD16_eabi.lib : lseek.c.obj (.text:lseek)
+                  00003f0c    00000028                                   : memory.c.obj (.text:mremove)
+                  00003f34    00000028                                   : write.c.obj (.text:write)
+                  00003f5c    00000024                                   : rand.c.obj (.text:srand)
+                  00003f80    00000020     driverlib.lib : uart.obj (.text:UARTDisable)
+                  00003fa0    00000020     rtsv7M4_T_le_v4SPD16_eabi.lib : memchr.c.obj (.text:memchr)
+                  00003fc0    0000001c                                   : memccpy.c.obj (.text:memccpy)
+                  00003fdc    00000018     driverlib.lib : gpio.obj (.text:GPIOIntRegister)
+                  00003ff4    00000018                   : gpio.obj (.text:GPIOPinTypeGPIOOutput)
+                  0000400c    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : strcmp.c.obj (.text:strcmp)
+                  00004024    00000016                                   : strchr.c.obj (.text:strchr)
+                  0000403a    00000014     driverlib.lib : uart.obj (.text:UARTEnable)
+                  0000404e    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : s_copysign.c.obj (.text:copysign)
+                  00004062    00000014                                   : strcpy.c.obj (.text:strcpy)
+                  00004076    00000014                                   : strlen.c.obj (.text:strlen)
+                  0000408a    00000012     driverlib.lib : gpio.obj (.text:GPIOPinTypeGPIOInput)
+                  0000409c    00000012                   : gpio.obj (.text:GPIOPinTypeUART)
+                  000040ae    00000012     rtsv7M4_T_le_v4SPD16_eabi.lib : wcslen.c.obj (.text:wcslen)
+                  000040c0    0000000e     driverlib.lib : gpio.obj (.text:GPIOIntDisable)
+                  000040ce    0000000e                   : gpio.obj (.text:GPIOIntStatus)
+                  000040dc    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : time.c.obj (.text:__time32)
+                  000040ea    0000000e                                   : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  000040f8    0000000c     driverlib.lib : gpio.obj (.text:GPIOIntEnable)
+                  00004104    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init)
+                  00004110    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  0000411c    0000000a     driverlib.lib : uart.obj (.text:UARTCharGet)
+                  00004126    0000000a                   : uart.obj (.text:UARTCharPut)
+                  00004130    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.c.obj (.text:__aeabi_errno_addr)
+                  00004138    00000006     driverlib.lib : gpio.obj (.text:GPIOIntClear)
+                  0000413e    00000006                   : gpio.obj (.text:GPIOPinWrite)
+                  00004144    00000006                   : sysctl.obj (.text:SysCtlDelay)
+                  0000414a    00000006                   : uart.obj (.text:UARTClockSourceSet)
+                  00004150    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : printf.c.obj (.text:_outc)
+                  00004154    00000004                                   : printf.c.obj (.text:_outs)
+                  00004158    00000004                                   : pre_init.c.obj (.text:_system_pre_init)
+                  0000415c    00000004                                   : exit.c.obj (.text:abort:abort)
 
-.const     0    000018b4    000002e0     
-                  000018b4    000000d8     driverlib.lib : gpio.obj (.const:g_ppui32GPIOIntMapSnowflake)
-                  0000198c    000000c0                   : gpio.obj (.const:g_ppui32GPIOIntMapBlizzard)
-                  00001a4c    00000090                   : gpio.obj (.const:g_pui32GPIOBaseAddrs)
-                  00001adc    00000070                   : interrupt.obj (.const)
-                  00001b4c    00000012     uartstdio.obj (.const:.string)
-                  00001b5e    0000000e     movement.obj (.const:.string:$P$T0$1)
-                  00001b6c    0000000c     uartstdio.obj (.const:g_ui32UARTBase)
-                  00001b78    0000000c     uartstdio.obj (.const:g_ui32UARTPeriph)
-                  00001b84    0000000b     movement.obj (.const:.string:$P$T1$2)
-                  00001b8f    00000001     --HOLE-- [fill = 0]
-                  00001b90    00000004     uartstdio.obj (.const)
+.const     0    00004160    000003e4     
+                  00004160    00000101     rtsv7M4_T_le_v4SPD16_eabi.lib : ctype.c.obj (.const:.string:_ctypes_)
+                  00004261    00000003     --HOLE-- [fill = 0]
+                  00004264    000000d8     driverlib.lib : gpio.obj (.const:g_ppui32GPIOIntMapSnowflake)
+                  0000433c    000000c0                   : gpio.obj (.const:g_ppui32GPIOIntMapBlizzard)
+                  000043fc    00000090                   : gpio.obj (.const:g_pui32GPIOBaseAddrs)
+                  0000448c    00000070                   : interrupt.obj (.const)
+                  000044fc    00000012     uartstdio.obj (.const:.string)
+                  0000450e    0000000e     movement.obj (.const:.string:$P$T0$1)
+                  0000451c    0000000c     uartstdio.obj (.const:g_ui32UARTBase)
+                  00004528    0000000c     uartstdio.obj (.const:g_ui32UARTPeriph)
+                  00004534    0000000b     movement.obj (.const:.string:$P$T1$2)
+                  0000453f    00000001     --HOLE-- [fill = 0]
+                  00004540    00000004     uartstdio.obj (.const)
 
-.cinit     0    00001b98    00000120     
-                  00001b98    000000e9     (.cinit..data.load) [load image, compression = lzss]
-                  00001c81    00000003     --HOLE-- [fill = 0]
-                  00001c84    0000000c     (__TI_handler_table)
-                  00001c90    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  00001c98    00000008     (.cinit..vtable.load) [load image, compression = zero_init]
-                  00001ca0    00000018     (__TI_cinit_table)
+.cinit     0    00004548    00000180     
+                  00004548    0000014a     (.cinit..data.load) [load image, compression = lzss]
+                  00004692    00000002     --HOLE-- [fill = 0]
+                  00004694    0000000c     (__TI_handler_table)
+                  000046a0    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  000046a8    00000008     (.cinit..vtable.load) [load image, compression = zero_init]
+                  000046b0    00000018     (__TI_cinit_table)
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
@@ -117,153 +191,211 @@ section   page    origin      length       input sections
 .vtable    0    20000000    0000026c     UNINITIALIZED
                   20000000    0000026c     driverlib.lib : interrupt.obj (.vtable)
 
-.data      0    2000026c    0000037c     UNINITIALIZED
-                  2000026c    00000024     main.obj (.data:gameBoard)
-                  20000290    0000001a     movement.obj (.data:init)
-                  200002aa    00000002     --HOLE--
-                  200002ac    00000010     main.obj (.data)
-                  200002bc    0000000b     movement.obj (.data:pos0_s1)
-                  200002c7    0000000b     movement.obj (.data:pos0_s2)
-                  200002d2    0000000b     movement.obj (.data:pos0_s3)
-                  200002dd    0000000b     movement.obj (.data:pos0_s4)
-                  200002e8    0000000b     movement.obj (.data:pos0_s5)
-                  200002f3    0000000b     movement.obj (.data:pos0_s6)
-                  200002fe    0000000b     movement.obj (.data:pos1_s1)
-                  20000309    0000000b     movement.obj (.data:pos1_s2)
-                  20000314    0000000b     movement.obj (.data:pos1_s3)
-                  2000031f    0000000b     movement.obj (.data:pos1_s4)
-                  2000032a    0000000b     movement.obj (.data:pos1_s5)
-                  20000335    0000000b     movement.obj (.data:pos1_s6)
-                  20000340    0000000b     movement.obj (.data:pos2_s1)
-                  2000034b    0000000b     movement.obj (.data:pos2_s2)
-                  20000356    0000000b     movement.obj (.data:pos2_s3)
-                  20000361    0000000b     movement.obj (.data:pos2_s4)
-                  2000036c    0000000b     movement.obj (.data:pos2_s5)
-                  20000377    0000000b     movement.obj (.data:pos2_s6)
-                  20000382    0000000b     movement.obj (.data:pos3_s1)
-                  2000038d    0000000b     movement.obj (.data:pos3_s2)
-                  20000398    0000000b     movement.obj (.data:pos3_s3)
-                  200003a3    0000000b     movement.obj (.data:pos3_s4)
-                  200003ae    0000000b     movement.obj (.data:pos3_s5)
-                  200003b9    0000000b     movement.obj (.data:pos3_s6)
-                  200003c4    0000000b     movement.obj (.data:pos4_s1)
-                  200003cf    0000000b     movement.obj (.data:pos4_s2)
-                  200003da    0000000b     movement.obj (.data:pos4_s3)
-                  200003e5    0000000b     movement.obj (.data:pos4_s4)
-                  200003f0    0000000b     movement.obj (.data:pos4_s5)
-                  200003fb    0000000b     movement.obj (.data:pos4_s6)
-                  20000406    0000000b     movement.obj (.data:pos5_s1)
-                  20000411    0000000b     movement.obj (.data:pos5_s2)
-                  2000041c    0000000b     movement.obj (.data:pos5_s3)
-                  20000427    0000000b     movement.obj (.data:pos5_s4)
-                  20000432    0000000b     movement.obj (.data:pos5_s5)
-                  2000043d    0000000b     movement.obj (.data:pos5_s6)
-                  20000448    0000000b     movement.obj (.data:pos6_s1)
-                  20000453    0000000b     movement.obj (.data:pos6_s2)
-                  2000045e    0000000b     movement.obj (.data:pos6_s3)
-                  20000469    0000000b     movement.obj (.data:pos6_s4)
-                  20000474    0000000b     movement.obj (.data:pos6_s5)
-                  2000047f    0000000b     movement.obj (.data:pos6_s6)
-                  2000048a    0000000b     movement.obj (.data:pos7_s1)
-                  20000495    0000000b     movement.obj (.data:pos7_s2)
-                  200004a0    0000000b     movement.obj (.data:pos7_s3)
-                  200004ab    0000000b     movement.obj (.data:pos7_s4)
-                  200004b6    0000000b     movement.obj (.data:pos7_s5)
-                  200004c1    0000000b     movement.obj (.data:pos7_s6)
-                  200004cc    0000000b     movement.obj (.data:pos8_s1)
-                  200004d7    0000000b     movement.obj (.data:pos8_s2)
-                  200004e2    0000000b     movement.obj (.data:pos8_s3)
-                  200004ed    0000000b     movement.obj (.data:pos8_s4)
-                  200004f8    0000000b     movement.obj (.data:pos8_s5)
-                  20000503    0000000b     movement.obj (.data:pos8_s6)
-                  2000050e    0000000b     movement.obj (.data:raise_s1)
-                  20000519    0000000b     movement.obj (.data:raise_s2)
-                  20000524    0000000b     movement.obj (.data:raise_s3)
-                  2000052f    0000000b     movement.obj (.data:raise_s4)
-                  2000053a    0000000b     movement.obj (.data:raise_s5)
-                  20000545    0000000b     movement.obj (.data:raise_s6)
-                  20000550    0000000b     movement.obj (.data:slideO_s1)
-                  2000055b    0000000b     movement.obj (.data:slideO_s2)
-                  20000566    0000000b     movement.obj (.data:slideO_s3)
-                  20000571    0000000b     movement.obj (.data:slideO_s4)
-                  2000057c    0000000b     movement.obj (.data:slideO_s5)
-                  20000587    0000000b     movement.obj (.data:slideO_s6)
-                  20000592    0000000b     movement.obj (.data:slideX_s1)
-                  2000059d    0000000b     movement.obj (.data:slideX_s2)
-                  200005a8    0000000b     movement.obj (.data:slideX_s3)
-                  200005b3    0000000b     movement.obj (.data:slideX_s4)
-                  200005be    0000000b     movement.obj (.data:slideX_s5)
-                  200005c9    0000000b     movement.obj (.data:slideX_s6)
-                  200005d4    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.c.obj (.data:$O1$$)
-                  200005dc    00000005     uartstdio.obj (.data)
-                  200005e1    00000003     --HOLE--
-                  200005e4    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : rand.c.obj (.data)
+.data      0    2000026c    00000560     UNINITIALIZED
+                  2000026c    000000f0     rtsv7M4_T_le_v4SPD16_eabi.lib : defs.c.obj (.data:_ftable)
+                  2000035c    00000078                                   : write.c.obj (.data:_device)
+                  200003d4    00000050                                   : write.c.obj (.data:_stream)
+                  20000424    00000024     main.obj (.data:gameBoard)
+                  20000448    0000001a     movement.obj (.data:init)
+                  20000462    00000002     --HOLE--
+                  20000464    00000010     main.obj (.data)
+                  20000474    00000010     rtsv7M4_T_le_v4SPD16_eabi.lib : defs.c.obj (.data)
+                  20000484    0000000c                                   : exit.c.obj (.data:$O1$$)
+                  20000490    0000000c                                   : memory.c.obj (.data:$O1$$)
+                  2000049c    0000000b     movement.obj (.data:pos0_s1)
+                  200004a7    0000000b     movement.obj (.data:pos0_s2)
+                  200004b2    0000000b     movement.obj (.data:pos0_s3)
+                  200004bd    0000000b     movement.obj (.data:pos0_s4)
+                  200004c8    0000000b     movement.obj (.data:pos0_s5)
+                  200004d3    0000000b     movement.obj (.data:pos0_s6)
+                  200004de    0000000b     movement.obj (.data:pos1_s1)
+                  200004e9    0000000b     movement.obj (.data:pos1_s2)
+                  200004f4    0000000b     movement.obj (.data:pos1_s3)
+                  200004ff    0000000b     movement.obj (.data:pos1_s4)
+                  2000050a    0000000b     movement.obj (.data:pos1_s5)
+                  20000515    0000000b     movement.obj (.data:pos1_s6)
+                  20000520    0000000b     movement.obj (.data:pos2_s1)
+                  2000052b    0000000b     movement.obj (.data:pos2_s2)
+                  20000536    0000000b     movement.obj (.data:pos2_s3)
+                  20000541    0000000b     movement.obj (.data:pos2_s4)
+                  2000054c    0000000b     movement.obj (.data:pos2_s5)
+                  20000557    0000000b     movement.obj (.data:pos2_s6)
+                  20000562    0000000b     movement.obj (.data:pos3_s1)
+                  2000056d    0000000b     movement.obj (.data:pos3_s2)
+                  20000578    0000000b     movement.obj (.data:pos3_s3)
+                  20000583    0000000b     movement.obj (.data:pos3_s4)
+                  2000058e    0000000b     movement.obj (.data:pos3_s5)
+                  20000599    0000000b     movement.obj (.data:pos3_s6)
+                  200005a4    0000000b     movement.obj (.data:pos4_s1)
+                  200005af    0000000b     movement.obj (.data:pos4_s2)
+                  200005ba    0000000b     movement.obj (.data:pos4_s3)
+                  200005c5    0000000b     movement.obj (.data:pos4_s4)
+                  200005d0    0000000b     movement.obj (.data:pos4_s5)
+                  200005db    0000000b     movement.obj (.data:pos4_s6)
+                  200005e6    0000000b     movement.obj (.data:pos5_s1)
+                  200005f1    0000000b     movement.obj (.data:pos5_s2)
+                  200005fc    0000000b     movement.obj (.data:pos5_s3)
+                  20000607    0000000b     movement.obj (.data:pos5_s4)
+                  20000612    0000000b     movement.obj (.data:pos5_s5)
+                  2000061d    0000000b     movement.obj (.data:pos5_s6)
+                  20000628    0000000b     movement.obj (.data:pos6_s1)
+                  20000633    0000000b     movement.obj (.data:pos6_s2)
+                  2000063e    0000000b     movement.obj (.data:pos6_s3)
+                  20000649    0000000b     movement.obj (.data:pos6_s4)
+                  20000654    0000000b     movement.obj (.data:pos6_s5)
+                  2000065f    0000000b     movement.obj (.data:pos6_s6)
+                  2000066a    0000000b     movement.obj (.data:pos7_s1)
+                  20000675    0000000b     movement.obj (.data:pos7_s2)
+                  20000680    0000000b     movement.obj (.data:pos7_s3)
+                  2000068b    0000000b     movement.obj (.data:pos7_s4)
+                  20000696    0000000b     movement.obj (.data:pos7_s5)
+                  200006a1    0000000b     movement.obj (.data:pos7_s6)
+                  200006ac    0000000b     movement.obj (.data:pos8_s1)
+                  200006b7    0000000b     movement.obj (.data:pos8_s2)
+                  200006c2    0000000b     movement.obj (.data:pos8_s3)
+                  200006cd    0000000b     movement.obj (.data:pos8_s4)
+                  200006d8    0000000b     movement.obj (.data:pos8_s5)
+                  200006e3    0000000b     movement.obj (.data:pos8_s6)
+                  200006ee    0000000b     movement.obj (.data:raise_s1)
+                  200006f9    0000000b     movement.obj (.data:raise_s2)
+                  20000704    0000000b     movement.obj (.data:raise_s3)
+                  2000070f    0000000b     movement.obj (.data:raise_s4)
+                  2000071a    0000000b     movement.obj (.data:raise_s5)
+                  20000725    0000000b     movement.obj (.data:raise_s6)
+                  20000730    0000000b     movement.obj (.data:slideO_s1)
+                  2000073b    0000000b     movement.obj (.data:slideO_s2)
+                  20000746    0000000b     movement.obj (.data:slideO_s3)
+                  20000751    0000000b     movement.obj (.data:slideO_s4)
+                  2000075c    0000000b     movement.obj (.data:slideO_s5)
+                  20000767    0000000b     movement.obj (.data:slideO_s6)
+                  20000772    0000000b     movement.obj (.data:slideX_s1)
+                  2000077d    0000000b     movement.obj (.data:slideX_s2)
+                  20000788    0000000b     movement.obj (.data:slideX_s3)
+                  20000793    0000000b     movement.obj (.data:slideX_s4)
+                  2000079e    0000000b     movement.obj (.data:slideX_s5)
+                  200007a9    0000000b     movement.obj (.data:slideX_s6)
+                  200007b4    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.c.obj (.data:$O1$$)
+                  200007bc    00000005     uartstdio.obj (.data)
+                  200007c1    00000003     --HOLE--
+                  200007c4    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.c.obj (.data)
+                  200007c8    00000004                                   : rand.c.obj (.data)
 
-.bss       0    200007e8    00000128     UNINITIALIZED
-                  200007e8    00000120     rtsv7M4_T_le_v4SPD16_eabi.lib : trgmsg.c.obj (.bss:_CIOBUF_)
-                  20000908    00000008     (.common:parmbuf)
+.stack     0    200007d0    00000200     UNINITIALIZED
+                  200007d0    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.stack)
+                  200007d4    000001fc     --HOLE--
 
-.stack     0    200005e8    00000200     UNINITIALIZED
-                  200005e8    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.stack)
-                  200005ec    000001fc     --HOLE--
+.bss       0    200009d0    000001c8     UNINITIALIZED
+                  200009d0    00000120     rtsv7M4_T_le_v4SPD16_eabi.lib : trgmsg.c.obj (.bss:_CIOBUF_)
+                  20000af0    000000a0     (.common:__TI_tmpnams)
+                  20000b90    00000008     (.common:parmbuf)
+
+.sysmem    0    20000b98    00000008     UNINITIALIZED
+                  20000b98    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.c.obj (.sysmem)
 
 MODULE SUMMARY
 
-       Module                         code   ro data   rw data
-       ------                         ----   -------   -------
+       Module                         code    ro data   rw data
+       ------                         ----    -------   -------
     .\
-       movement.obj                   1556   25        818    
-       uartstdio.obj                  1180   46        5      
-       main.obj                       804    0         52     
-       tm4c123gh6pm_startup_ccs.obj   12     620       0      
-    +--+------------------------------+------+---------+---------+
-       Total:                         3552   691       875    
-                                                              
+       movement.obj                   1556    25        818    
+       main.obj                       1208    0         52     
+       uartstdio.obj                  1180    46        5      
+       tm4c123gh6pm_startup_ccs.obj   12      620       0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         3956    691       875    
+                                                               
     D:/Installed_Programs/ti/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug/driverlib.lib
-       gpio.obj                       710    552       0      
-       interrupt.obj                  156    112       620    
-       sysctl.obj                     358    0         0      
-       uart.obj                       148    0         0      
-    +--+------------------------------+------+---------+---------+
-       Total:                         1372   664       620    
-                                                              
+       gpio.obj                       710     552       0      
+       interrupt.obj                  156     112       620    
+       sysctl.obj                     358     0         0      
+       uart.obj                       148     0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         1372    664       620    
+                                                               
     D:\Installed_Programs\ti\ccsv8\tools\compiler\ti-cgt-arm_18.1.2.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
-       trgmsg.c.obj                   108    0         288    
-       memcpy_t2.asm.obj              156    0         0      
-       copy_decompress_lzss.c.obj     104    0         0      
-       rand.c.obj                     88     0         4      
-       hosttime.c.obj                 72     0         0      
-       autoinit.c.obj                 68     0         0      
-       u_divt2.asm.obj                64     0         0      
-       boot_cortex_m.c.obj            56     0         0      
-       copy_zero_init.c.obj           18     0         0      
-       copy_decompress_none.c.obj     14     0         0      
-       time.c.obj                     14     0         0      
-       _lock.c.obj                    2      0         8      
-       hostopen.c.obj                 0      0         8      
-       exit.c.obj                     4      0         0      
-       pre_init.c.obj                 4      0         0      
-       div0.asm.obj                   2      0         0      
-    +--+------------------------------+------+---------+---------+
-       Total:                         774    0         308    
-                                                              
-       Stack:                         0      0         512    
-       Linker Generated:              0      285       0      
-    +--+------------------------------+------+---------+---------+
-       Grand Total:                   5698   1640      2315   
+       _printfi.c.obj                 4863    0         0      
+       memory.c.obj                   492     0         12     
+       fd_add_t2.asm.obj              438     0         0      
+       defs.c.obj                     0       0         416    
+       trgmsg.c.obj                   108     0         288    
+       fd_div_t2.asm.obj              310     0         0      
+       fputs.c.obj                    276     0         0      
+       s_scalbn.c.obj                 272     0         0      
+       fd_cmp_t2.asm.obj              268     0         0      
+       ctype.c.obj                    0       257       0      
+       fd_mul_t2.asm.obj              252     0         0      
+       write.c.obj                    40      0         200    
+       setvbuf.c.obj                  220     0         0      
+       memcpy_t2.asm.obj              156     0         0      
+       ull_div_t2.asm.obj             150     0         0      
+       fputc.c.obj                    140     0         0      
+       memset_t2.asm.obj              122     0         0      
+       fclose.c.obj                   116     0         0      
+       getdevice.c.obj                116     0         0      
+       printf.c.obj                   112     0         0      
+       copy_decompress_lzss.c.obj     104     0         0      
+       hostlseek.c.obj                104     0         0      
+       hostopen.c.obj                 96      0         8      
+       hostrename.c.obj               104     0         0      
+       fseek.c.obj                    100     0         0      
+       s_frexp.c.obj                  100     0         0      
+       _io_perm.c.obj                 98      0         0      
+       close.c.obj                    92      0         0      
+       rand.c.obj                     88      0         4      
+       exit.c.obj                     76      0         12     
+       hostread.c.obj                 88      0         0      
+       hostwrite.c.obj                88      0         0      
+       ltoa.c.obj                     84      0         0      
+       atoi.c.obj                     76      0         0      
+       fflush.c.obj                   76      0         0      
+       fd_toi_t2.asm.obj              72      0         0      
+       hosttime.c.obj                 72      0         0      
+       autoinit.c.obj                 68      0         0      
+       hostclose.c.obj                68      0         0      
+       hostunlink.c.obj               68      0         0      
+       u_divt2.asm.obj                64      0         0      
+       boot_cortex_m.c.obj            56      0         0      
+       strncpy.c.obj                  54      0         0      
+       fopen.c.obj                    52      0         0      
+       i_tofd_t2.asm.obj              46      0         0      
+       unlink.c.obj                   44      0         0      
+       lseek.c.obj                    40      0         0      
+       memchr.c.obj                   32      0         0      
+       memccpy.c.obj                  28      0         0      
+       strcmp.c.obj                   24      0         0      
+       strchr.c.obj                   22      0         0      
+       s_copysign.c.obj               20      0         0      
+       strcpy.c.obj                   20      0         0      
+       strlen.c.obj                   20      0         0      
+       wcslen.c.obj                   18      0         0      
+       copy_decompress_none.c.obj     14      0         0      
+       time.c.obj                     14      0         0      
+       copy_zero_init.c.obj           12      0         0      
+       errno.c.obj                    8       0         4      
+       _lock.c.obj                    2       0         8      
+       pre_init.c.obj                 4       0         0      
+       div0.asm.obj                   2       0         0      
+    +--+------------------------------+-------+---------+---------+
+       Total:                         10769   257       952    
+                                                               
+       Heap:                          0       0         8      
+       Stack:                         0       0         512    
+       Linker Generated:              0       382       0      
+    +--+------------------------------+-------+---------+---------+
+       Grand Total:                   16097   1994      2967   
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00001ca0 records: 3, size/record: 8, table size: 24
-	.data: load addr=00001b98, load size=000000e9 bytes, run addr=2000026c, run size=0000037c bytes, compression=lzss
-	.bss: load addr=00001c90, load size=00000008 bytes, run addr=200007e8, run size=00000128 bytes, compression=zero_init
-	.vtable: load addr=00001c98, load size=00000008 bytes, run addr=20000000, run size=0000026c bytes, compression=zero_init
+__TI_cinit_table @ 000046b0 records: 3, size/record: 8, table size: 24
+	.data: load addr=00004548, load size=0000014a bytes, run addr=2000026c, run size=00000560 bytes, compression=lzss
+	.bss: load addr=000046a0, load size=00000008 bytes, run addr=200009d0, run size=000001c8 bytes, compression=zero_init
+	.vtable: load addr=000046a8, load size=00000008 bytes, run addr=20000000, run size=0000026c bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00001c84 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00004694 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_lzss
 	index: 2, handler: __TI_decompress_none
@@ -271,353 +403,517 @@ __TI_handler_table @ 00001c84 records: 3, size/record: 4, table size: 12
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
 
-address   name                          
--------   ----                          
-000018af  C$$EXIT                       
-00001633  C$$IO$$                       
-00001745  GPIODirModeSet                
-00001893  GPIOIntClear                  
-0000182f  GPIOIntDisable                
-00001867  GPIOIntEnable                 
-000017b5  GPIOIntRegister               
-0000183d  GPIOIntStatus                 
-000013d5  GPIOIntTypeSet                
-00001041  GPIOPadConfigSet              
-0000142d  GPIOPinConfigure              
-000017f9  GPIOPinTypeGPIOInput          
-000017cd  GPIOPinTypeGPIOOutput         
-0000180b  GPIOPinTypeUART               
-00001899  GPIOPinWrite                  
-00001475  HOSTtime                      
-00001305  IntEnable                     
-00001675  IntRegister                   
-200002ac  Mask7seg                      
-00001873  ResetISR                      
-00001175  SysCtlClockSet                
-0000189f  SysCtlDelay                   
-000016a9  SysCtlPeripheralEnable        
-000015cd  SysCtlPeripheralPresent       
-0000187f  UARTCharGet                   
-00001889  UARTCharPut                   
-000018a5  UARTClockSourceSet            
-000014bd  UARTConfigSetExpClk           
-00001795  UARTDisable                   
-000017e5  UARTEnable                    
-00000881  UARTStdioConfig               
-000009c7  UARTgetc                      
-0000090d  UARTgets                      
-00000ce7  UARTprintf                    
-000009ed  UARTvprintf                   
-000008c7  UARTwrite                     
-200007e8  __CIOBUF_                     
-200007e8  __STACK_END                   
-00000200  __STACK_SIZE                  
-200007e8  __STACK_TOP                   
-00001ca0  __TI_CINIT_Base               
-00001cb8  __TI_CINIT_Limit              
-00001c84  __TI_Handler_Table_Base       
-00001c90  __TI_Handler_Table_Limit      
-00001549  __TI_auto_init_nobinit_nopinit
-0000136d  __TI_decompress_lzss          
-00001859  __TI_decompress_none          
-ffffffff  __TI_pprof_out_hndl           
-ffffffff  __TI_prof_data_size           
-ffffffff  __TI_prof_data_start          
-000016dd  __TI_readmsg                  
-00000000  __TI_static_base__            
-00001605  __TI_writemsg                 
-0000181d  __TI_zero_init_nomemset       
-0000142b  __aeabi_idiv0                 
-0000142b  __aeabi_ldiv0                 
-00001269  __aeabi_memcpy                
-00001269  __aeabi_memcpy4               
-00001269  __aeabi_memcpy8               
-0000158d  __aeabi_uidiv                 
-0000158d  __aeabi_uidivmod              
-ffffffff  __binit__                     
-ffffffff  __c_args__                    
-UNDEFED   __mpu_init                    
-200005e8  __stack                       
-0000184b  __time32                      
-0000163d  _c_int00_noargs               
-200005d4  _lock                         
-00001173  _nop                          
-UNDEFED   _system_post_cinit            
-000018ab  _system_pre_init              
-200005d8  _unlock                       
-000018af  abort                         
-ffffffff  binit                         
-00000f45  button_setup                  
-00000fb1  coinFlip                      
-200002b0  count                         
-200002b4  currentSlide                  
-20000000  g_pfnRAMVectors               
-00000000  g_pfnVectors                  
-2000026c  gameBoard                     
-0000069d  get_block_from_slide          
-200002b8  humanTurnDone                 
-20000290  init                          
-000007cd  initialize                    
-00000d1d  main                          
-00001269  memcpy                        
-0000026d  move                          
-00000281  moveBlock                     
-00000781  movement_setup                
-00000d29  onButtonDown                  
-20000908  parmbuf                       
-00000fcd  placePiece                    
-200002bc  pos0_s1                       
-200002c7  pos0_s2                       
-200002d2  pos0_s3                       
-200002dd  pos0_s4                       
-200002e8  pos0_s5                       
-200002f3  pos0_s6                       
-200002fe  pos1_s1                       
-20000309  pos1_s2                       
-20000314  pos1_s3                       
-2000031f  pos1_s4                       
-2000032a  pos1_s5                       
-20000335  pos1_s6                       
-20000340  pos2_s1                       
-2000034b  pos2_s2                       
-20000356  pos2_s3                       
-20000361  pos2_s4                       
-2000036c  pos2_s5                       
-20000377  pos2_s6                       
-20000382  pos3_s1                       
-2000038d  pos3_s2                       
-20000398  pos3_s3                       
-200003a3  pos3_s4                       
-200003ae  pos3_s5                       
-200003b9  pos3_s6                       
-200003c4  pos4_s1                       
-200003cf  pos4_s2                       
-200003da  pos4_s3                       
-200003e5  pos4_s4                       
-200003f0  pos4_s5                       
-200003fb  pos4_s6                       
-20000406  pos5_s1                       
-20000411  pos5_s2                       
-2000041c  pos5_s3                       
-20000427  pos5_s4                       
-20000432  pos5_s5                       
-2000043d  pos5_s6                       
-20000448  pos6_s1                       
-20000453  pos6_s2                       
-2000045e  pos6_s3                       
-20000469  pos6_s4                       
-20000474  pos6_s5                       
-2000047f  pos6_s6                       
-2000048a  pos7_s1                       
-20000495  pos7_s2                       
-200004a0  pos7_s3                       
-200004ab  pos7_s4                       
-200004b6  pos7_s5                       
-200004c1  pos7_s6                       
-200004cc  pos8_s1                       
-200004d7  pos8_s2                       
-200004e2  pos8_s3                       
-200004ed  pos8_s4                       
-200004f8  pos8_s5                       
-20000503  pos8_s6                       
-00000629  raise_after_slide             
-2000050e  raise_s1                      
-20000519  raise_s2                      
-20000524  raise_s3                      
-2000052f  raise_s4                      
-2000053a  raise_s5                      
-20000545  raise_s6                      
-00001711  rand                          
-20000550  slideO_s1                     
-2000055b  slideO_s2                     
-20000566  slideO_s3                     
-20000571  slideO_s4                     
-2000057c  slideO_s5                     
-20000587  slideO_s6                     
-20000592  slideX_s1                     
-2000059d  slideX_s2                     
-200005a8  slideX_s3                     
-200005b3  slideX_s4                     
-200005be  slideX_s5                     
-200005c9  slideX_s6                     
-00001771  srand                         
-00000721  test_slides_exhaustively      
-0000184b  time                          
+address   name                           
+-------   ----                           
+0000415d  C$$EXIT                        
+00003c77  C$$IO$$                        
+00003eb9  GPIODirModeSet                 
+00004139  GPIOIntClear                   
+000040c1  GPIOIntDisable                 
+000040f9  GPIOIntEnable                  
+00003fdd  GPIOIntRegister                
+000040cf  GPIOIntStatus                  
+000036ad  GPIOIntTypeSet                 
+0000249f  GPIOPadConfigSet               
+00003899  GPIOPinConfigure               
+0000408b  GPIOPinTypeGPIOInput           
+00003ff5  GPIOPinTypeGPIOOutput          
+0000409d  GPIOPinTypeUART                
+0000413f  GPIOPinWrite                   
+00003a01  HOSTclose                      
+0000320d  HOSTlseek                      
+00003541  HOSTopen                       
+000035fd  HOSTread                       
+00003275  HOSTrename                     
+000038e1  HOSTtime                       
+00003a45  HOSTunlink                     
+00003655  HOSTwrite                      
+000032dd  IntEnable                      
+00003d29  IntRegister                    
+20000464  Mask7seg                       
+00004111  ResetISR                       
+00002a11  SysCtlClockSet                 
+00004145  SysCtlDelay                    
+00003d5d  SysCtlPeripheralEnable         
+00003c11  SysCtlPeripheralPresent        
+0000411d  UARTCharGet                    
+00004127  UARTCharPut                    
+0000414b  UARTClockSourceSet             
+000039b9  UARTConfigSetExpClk            
+00003f81  UARTDisable                    
+0000403b  UARTEnable                     
+00001799  UARTStdioConfig                
+000018df  UARTgetc                       
+00001825  UARTgets                       
+00001bff  UARTprintf                     
+00001905  UARTvprintf                    
+000017df  UARTwrite                      
+200009d0  __CIOBUF_                      
+200009d0  __STACK_END                    
+00000200  __STACK_SIZE                   
+200009d0  __STACK_TOP                    
+00000008  __SYSMEM_SIZE                  
+000046b0  __TI_CINIT_Base                
+000046c8  __TI_CINIT_Limit               
+00004694  __TI_Handler_Table_Base        
+000046a0  __TI_Handler_Table_Limit       
+00003acd  __TI_auto_init_nobinit_nopinit 
+00003d91  __TI_cleanup                   
+20000484  __TI_cleanup_ptr               
+00003129  __TI_closefile                 
+00003345  __TI_decompress_lzss           
+000040eb  __TI_decompress_none           
+000037ff  __TI_doflush                   
+20000488  __TI_dtors_ptr                 
+2000048c  __TI_enable_exit_profile_output
+20000474  __TI_ft_end                    
+ffffffff  __TI_pprof_out_hndl            
+0000026d  __TI_printfi                   
+ffffffff  __TI_prof_data_size            
+ffffffff  __TI_prof_data_start           
+00003dc5  __TI_readmsg                   
+00000000  __TI_static_base__             
+20000af0  __TI_tmpnams                   
+00003c49  __TI_writemsg                  
+000034dd  __TI_wrt_ok                    
+00004105  __TI_zero_init                 
+00002f29  __aeabi_cdcmpeq                
+00002f29  __aeabi_cdcmple                
+00002faf  __aeabi_cdrcmple               
+00003971  __aeabi_d2iz                   
+0000207f  __aeabi_dadd                   
+00002369  __aeabi_ddiv                   
+00002915  __aeabi_dmul                   
+00002075  __aeabi_dsub                   
+00004131  __aeabi_errno_addr             
+00003e5d  __aeabi_i2d                    
+0000222b  __aeabi_idiv0                  
+0000222b  __aeabi_ldiv0                  
+00003035  __aeabi_memclr                 
+00003035  __aeabi_memclr4                
+00003035  __aeabi_memclr8                
+00002d6b  __aeabi_memcpy                 
+00002d6b  __aeabi_memcpy4                
+00002d6b  __aeabi_memcpy8                
+00003037  __aeabi_memset                 
+00003037  __aeabi_memset4                
+00003037  __aeabi_memset8                
+20000480  __aeabi_stderr                 
+20000478  __aeabi_stdin                  
+2000047c  __aeabi_stdout                 
+00003b55  __aeabi_uidiv                  
+00003b55  __aeabi_uidivmod               
+00002e07  __aeabi_uldivmod               
+ffffffff  __binit__                      
+ffffffff  __c_args__                     
+UNDEFED   __mpu_init                     
+200007d0  __stack                        
+000040dd  __time32                       
+00003c81  _c_int00_noargs                
+00004160  _ctypes_                       
+2000035c  _device                        
+2000026c  _ftable                        
+200007b4  _lock                          
+00000ccb  _nop                           
+200003d4  _stream                        
+20000b98  _sys_memory                    
+UNDEFED   _system_post_cinit             
+00004159  _system_pre_init               
+200007b8  _unlock                        
+0000415d  abort                          
+0000384d  atoi                           
+ffffffff  binit                          
+00001509  button_setup                   
+000035a1  close                          
+00001575  coinFlip                       
+0000404f  copysign                       
+0000404f  copysignl                      
+20000468  count                          
+2000046c  currentSlide                   
+0000161d  determine_winner               
+200007c4  errno                          
+00003929  exit                           
+00003e2d  finddevice                     
+00002e9d  fputc                          
+000026f1  fputs                          
+00002be1  free                           
+00003415  frexp                          
+00003415  frexpl                         
+00003479  fseek                          
+20000000  g_pfnRAMVectors                
+00000000  g_pfnVectors                   
+20000424  gameBoard                      
+000010fd  get_block_from_slide           
+00003b11  getdevice                      
+20000470  humanTurnDone                  
+20000448  init                           
+0000122d  initialize                     
+00002805  ldexp                          
+00002805  ldexpl                         
+00003ee5  lseek                          
+00003759  ltoa                           
+000012e1  main                           
+000030b1  malloc                         
+00003fc1  memccpy                        
+00003fa1  memchr                         
+00002d6b  memcpy                         
+0000303d  memset                         
+00003cb9  minit                          
+00000ccd  move                           
+00000ce1  moveBlock                      
+000011e1  movement_setup                 
+000012ed  onButtonDown                   
+20000b90  parmbuf                        
+00001591  placePiece                     
+2000049c  pos0_s1                        
+200004a7  pos0_s2                        
+200004b2  pos0_s3                        
+200004bd  pos0_s4                        
+200004c8  pos0_s5                        
+200004d3  pos0_s6                        
+200004de  pos1_s1                        
+200004e9  pos1_s2                        
+200004f4  pos1_s3                        
+200004ff  pos1_s4                        
+2000050a  pos1_s5                        
+20000515  pos1_s6                        
+20000520  pos2_s1                        
+2000052b  pos2_s2                        
+20000536  pos2_s3                        
+20000541  pos2_s4                        
+2000054c  pos2_s5                        
+20000557  pos2_s6                        
+20000562  pos3_s1                        
+2000056d  pos3_s2                        
+20000578  pos3_s3                        
+20000583  pos3_s4                        
+2000058e  pos3_s5                        
+20000599  pos3_s6                        
+200005a4  pos4_s1                        
+200005af  pos4_s2                        
+200005ba  pos4_s3                        
+200005c5  pos4_s4                        
+200005d0  pos4_s5                        
+200005db  pos4_s6                        
+200005e6  pos5_s1                        
+200005f1  pos5_s2                        
+200005fc  pos5_s3                        
+20000607  pos5_s4                        
+20000612  pos5_s5                        
+2000061d  pos5_s6                        
+20000628  pos6_s1                        
+20000633  pos6_s2                        
+2000063e  pos6_s3                        
+20000649  pos6_s4                        
+20000654  pos6_s5                        
+2000065f  pos6_s6                        
+2000066a  pos7_s1                        
+20000675  pos7_s2                        
+20000680  pos7_s3                        
+2000068b  pos7_s4                        
+20000696  pos7_s5                        
+200006a1  pos7_s6                        
+200006ac  pos8_s1                        
+200006b7  pos8_s2                        
+200006c2  pos8_s3                        
+200006cd  pos8_s4                        
+200006d8  pos8_s5                        
+200006e3  pos8_s6                        
+000015c7  print_winner                   
+000033ad  printf                         
+00002e9d  putc                           
+00001089  raise_after_slide              
+200006ee  raise_s1                       
+200006f9  raise_s2                       
+20000704  raise_s3                       
+2000070f  raise_s4                       
+2000071a  raise_s5                       
+20000725  raise_s6                       
+00003df9  rand                           
+00003e8d  remove                         
+00002805  scalbn                         
+00002805  scalbnl                        
+00002b05  setvbuf                        
+20000730  slideO_s1                      
+2000073b  slideO_s2                      
+20000746  slideO_s3                      
+20000751  slideO_s4                      
+2000075c  slideO_s5                      
+20000767  slideO_s6                      
+20000772  slideX_s1                      
+2000077d  slideX_s2                      
+20000788  slideX_s3                      
+20000793  slideX_s4                      
+2000079e  slideX_s5                      
+200007a9  slideX_s6                      
+00003f5d  srand                          
+00004025  strchr                         
+0000400d  strcmp                         
+00004063  strcpy                         
+00004077  strlen                         
+00003cf1  strncpy                        
+00001181  test_slides_exhaustively       
+000040dd  time                           
+00003e8d  unlink                         
+000040af  wcslen                         
+00003f35  write                          
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
 
-address   name                          
--------   ----                          
-00000000  __TI_static_base__            
-00000000  g_pfnVectors                  
-00000200  __STACK_SIZE                  
-0000026d  move                          
-00000281  moveBlock                     
-00000629  raise_after_slide             
-0000069d  get_block_from_slide          
-00000721  test_slides_exhaustively      
-00000781  movement_setup                
-000007cd  initialize                    
-00000881  UARTStdioConfig               
-000008c7  UARTwrite                     
-0000090d  UARTgets                      
-000009c7  UARTgetc                      
-000009ed  UARTvprintf                   
-00000ce7  UARTprintf                    
-00000d1d  main                          
-00000d29  onButtonDown                  
-00000f45  button_setup                  
-00000fb1  coinFlip                      
-00000fcd  placePiece                    
-00001041  GPIOPadConfigSet              
-00001173  _nop                          
-00001175  SysCtlClockSet                
-00001269  __aeabi_memcpy                
-00001269  __aeabi_memcpy4               
-00001269  __aeabi_memcpy8               
-00001269  memcpy                        
-00001305  IntEnable                     
-0000136d  __TI_decompress_lzss          
-000013d5  GPIOIntTypeSet                
-0000142b  __aeabi_idiv0                 
-0000142b  __aeabi_ldiv0                 
-0000142d  GPIOPinConfigure              
-00001475  HOSTtime                      
-000014bd  UARTConfigSetExpClk           
-00001549  __TI_auto_init_nobinit_nopinit
-0000158d  __aeabi_uidiv                 
-0000158d  __aeabi_uidivmod              
-000015cd  SysCtlPeripheralPresent       
-00001605  __TI_writemsg                 
-00001633  C$$IO$$                       
-0000163d  _c_int00_noargs               
-00001675  IntRegister                   
-000016a9  SysCtlPeripheralEnable        
-000016dd  __TI_readmsg                  
-00001711  rand                          
-00001745  GPIODirModeSet                
-00001771  srand                         
-00001795  UARTDisable                   
-000017b5  GPIOIntRegister               
-000017cd  GPIOPinTypeGPIOOutput         
-000017e5  UARTEnable                    
-000017f9  GPIOPinTypeGPIOInput          
-0000180b  GPIOPinTypeUART               
-0000181d  __TI_zero_init_nomemset       
-0000182f  GPIOIntDisable                
-0000183d  GPIOIntStatus                 
-0000184b  __time32                      
-0000184b  time                          
-00001859  __TI_decompress_none          
-00001867  GPIOIntEnable                 
-00001873  ResetISR                      
-0000187f  UARTCharGet                   
-00001889  UARTCharPut                   
-00001893  GPIOIntClear                  
-00001899  GPIOPinWrite                  
-0000189f  SysCtlDelay                   
-000018a5  UARTClockSourceSet            
-000018ab  _system_pre_init              
-000018af  C$$EXIT                       
-000018af  abort                         
-00001c84  __TI_Handler_Table_Base       
-00001c90  __TI_Handler_Table_Limit      
-00001ca0  __TI_CINIT_Base               
-00001cb8  __TI_CINIT_Limit              
-20000000  g_pfnRAMVectors               
-2000026c  gameBoard                     
-20000290  init                          
-200002ac  Mask7seg                      
-200002b0  count                         
-200002b4  currentSlide                  
-200002b8  humanTurnDone                 
-200002bc  pos0_s1                       
-200002c7  pos0_s2                       
-200002d2  pos0_s3                       
-200002dd  pos0_s4                       
-200002e8  pos0_s5                       
-200002f3  pos0_s6                       
-200002fe  pos1_s1                       
-20000309  pos1_s2                       
-20000314  pos1_s3                       
-2000031f  pos1_s4                       
-2000032a  pos1_s5                       
-20000335  pos1_s6                       
-20000340  pos2_s1                       
-2000034b  pos2_s2                       
-20000356  pos2_s3                       
-20000361  pos2_s4                       
-2000036c  pos2_s5                       
-20000377  pos2_s6                       
-20000382  pos3_s1                       
-2000038d  pos3_s2                       
-20000398  pos3_s3                       
-200003a3  pos3_s4                       
-200003ae  pos3_s5                       
-200003b9  pos3_s6                       
-200003c4  pos4_s1                       
-200003cf  pos4_s2                       
-200003da  pos4_s3                       
-200003e5  pos4_s4                       
-200003f0  pos4_s5                       
-200003fb  pos4_s6                       
-20000406  pos5_s1                       
-20000411  pos5_s2                       
-2000041c  pos5_s3                       
-20000427  pos5_s4                       
-20000432  pos5_s5                       
-2000043d  pos5_s6                       
-20000448  pos6_s1                       
-20000453  pos6_s2                       
-2000045e  pos6_s3                       
-20000469  pos6_s4                       
-20000474  pos6_s5                       
-2000047f  pos6_s6                       
-2000048a  pos7_s1                       
-20000495  pos7_s2                       
-200004a0  pos7_s3                       
-200004ab  pos7_s4                       
-200004b6  pos7_s5                       
-200004c1  pos7_s6                       
-200004cc  pos8_s1                       
-200004d7  pos8_s2                       
-200004e2  pos8_s3                       
-200004ed  pos8_s4                       
-200004f8  pos8_s5                       
-20000503  pos8_s6                       
-2000050e  raise_s1                      
-20000519  raise_s2                      
-20000524  raise_s3                      
-2000052f  raise_s4                      
-2000053a  raise_s5                      
-20000545  raise_s6                      
-20000550  slideO_s1                     
-2000055b  slideO_s2                     
-20000566  slideO_s3                     
-20000571  slideO_s4                     
-2000057c  slideO_s5                     
-20000587  slideO_s6                     
-20000592  slideX_s1                     
-2000059d  slideX_s2                     
-200005a8  slideX_s3                     
-200005b3  slideX_s4                     
-200005be  slideX_s5                     
-200005c9  slideX_s6                     
-200005d4  _lock                         
-200005d8  _unlock                       
-200005e8  __stack                       
-200007e8  __CIOBUF_                     
-200007e8  __STACK_END                   
-200007e8  __STACK_TOP                   
-20000908  parmbuf                       
-ffffffff  __TI_pprof_out_hndl           
-ffffffff  __TI_prof_data_size           
-ffffffff  __TI_prof_data_start          
-ffffffff  __binit__                     
-ffffffff  __c_args__                    
-ffffffff  binit                         
-UNDEFED   __mpu_init                    
-UNDEFED   _system_post_cinit            
+address   name                           
+-------   ----                           
+00000000  __TI_static_base__             
+00000000  g_pfnVectors                   
+00000008  __SYSMEM_SIZE                  
+00000200  __STACK_SIZE                   
+0000026d  __TI_printfi                   
+00000ccb  _nop                           
+00000ccd  move                           
+00000ce1  moveBlock                      
+00001089  raise_after_slide              
+000010fd  get_block_from_slide           
+00001181  test_slides_exhaustively       
+000011e1  movement_setup                 
+0000122d  initialize                     
+000012e1  main                           
+000012ed  onButtonDown                   
+00001509  button_setup                   
+00001575  coinFlip                       
+00001591  placePiece                     
+000015c7  print_winner                   
+0000161d  determine_winner               
+00001799  UARTStdioConfig                
+000017df  UARTwrite                      
+00001825  UARTgets                       
+000018df  UARTgetc                       
+00001905  UARTvprintf                    
+00001bff  UARTprintf                     
+00002075  __aeabi_dsub                   
+0000207f  __aeabi_dadd                   
+0000222b  __aeabi_idiv0                  
+0000222b  __aeabi_ldiv0                  
+00002369  __aeabi_ddiv                   
+0000249f  GPIOPadConfigSet               
+000026f1  fputs                          
+00002805  ldexp                          
+00002805  ldexpl                         
+00002805  scalbn                         
+00002805  scalbnl                        
+00002915  __aeabi_dmul                   
+00002a11  SysCtlClockSet                 
+00002b05  setvbuf                        
+00002be1  free                           
+00002d6b  __aeabi_memcpy                 
+00002d6b  __aeabi_memcpy4                
+00002d6b  __aeabi_memcpy8                
+00002d6b  memcpy                         
+00002e07  __aeabi_uldivmod               
+00002e9d  fputc                          
+00002e9d  putc                           
+00002f29  __aeabi_cdcmpeq                
+00002f29  __aeabi_cdcmple                
+00002faf  __aeabi_cdrcmple               
+00003035  __aeabi_memclr                 
+00003035  __aeabi_memclr4                
+00003035  __aeabi_memclr8                
+00003037  __aeabi_memset                 
+00003037  __aeabi_memset4                
+00003037  __aeabi_memset8                
+0000303d  memset                         
+000030b1  malloc                         
+00003129  __TI_closefile                 
+0000320d  HOSTlseek                      
+00003275  HOSTrename                     
+000032dd  IntEnable                      
+00003345  __TI_decompress_lzss           
+000033ad  printf                         
+00003415  frexp                          
+00003415  frexpl                         
+00003479  fseek                          
+000034dd  __TI_wrt_ok                    
+00003541  HOSTopen                       
+000035a1  close                          
+000035fd  HOSTread                       
+00003655  HOSTwrite                      
+000036ad  GPIOIntTypeSet                 
+00003759  ltoa                           
+000037ff  __TI_doflush                   
+0000384d  atoi                           
+00003899  GPIOPinConfigure               
+000038e1  HOSTtime                       
+00003929  exit                           
+00003971  __aeabi_d2iz                   
+000039b9  UARTConfigSetExpClk            
+00003a01  HOSTclose                      
+00003a45  HOSTunlink                     
+00003acd  __TI_auto_init_nobinit_nopinit 
+00003b11  getdevice                      
+00003b55  __aeabi_uidiv                  
+00003b55  __aeabi_uidivmod               
+00003c11  SysCtlPeripheralPresent        
+00003c49  __TI_writemsg                  
+00003c77  C$$IO$$                        
+00003c81  _c_int00_noargs                
+00003cb9  minit                          
+00003cf1  strncpy                        
+00003d29  IntRegister                    
+00003d5d  SysCtlPeripheralEnable         
+00003d91  __TI_cleanup                   
+00003dc5  __TI_readmsg                   
+00003df9  rand                           
+00003e2d  finddevice                     
+00003e5d  __aeabi_i2d                    
+00003e8d  remove                         
+00003e8d  unlink                         
+00003eb9  GPIODirModeSet                 
+00003ee5  lseek                          
+00003f35  write                          
+00003f5d  srand                          
+00003f81  UARTDisable                    
+00003fa1  memchr                         
+00003fc1  memccpy                        
+00003fdd  GPIOIntRegister                
+00003ff5  GPIOPinTypeGPIOOutput          
+0000400d  strcmp                         
+00004025  strchr                         
+0000403b  UARTEnable                     
+0000404f  copysign                       
+0000404f  copysignl                      
+00004063  strcpy                         
+00004077  strlen                         
+0000408b  GPIOPinTypeGPIOInput           
+0000409d  GPIOPinTypeUART                
+000040af  wcslen                         
+000040c1  GPIOIntDisable                 
+000040cf  GPIOIntStatus                  
+000040dd  __time32                       
+000040dd  time                           
+000040eb  __TI_decompress_none           
+000040f9  GPIOIntEnable                  
+00004105  __TI_zero_init                 
+00004111  ResetISR                       
+0000411d  UARTCharGet                    
+00004127  UARTCharPut                    
+00004131  __aeabi_errno_addr             
+00004139  GPIOIntClear                   
+0000413f  GPIOPinWrite                   
+00004145  SysCtlDelay                    
+0000414b  UARTClockSourceSet             
+00004159  _system_pre_init               
+0000415d  C$$EXIT                        
+0000415d  abort                          
+00004160  _ctypes_                       
+00004694  __TI_Handler_Table_Base        
+000046a0  __TI_Handler_Table_Limit       
+000046b0  __TI_CINIT_Base                
+000046c8  __TI_CINIT_Limit               
+20000000  g_pfnRAMVectors                
+2000026c  _ftable                        
+2000035c  _device                        
+200003d4  _stream                        
+20000424  gameBoard                      
+20000448  init                           
+20000464  Mask7seg                       
+20000468  count                          
+2000046c  currentSlide                   
+20000470  humanTurnDone                  
+20000474  __TI_ft_end                    
+20000478  __aeabi_stdin                  
+2000047c  __aeabi_stdout                 
+20000480  __aeabi_stderr                 
+20000484  __TI_cleanup_ptr               
+20000488  __TI_dtors_ptr                 
+2000048c  __TI_enable_exit_profile_output
+2000049c  pos0_s1                        
+200004a7  pos0_s2                        
+200004b2  pos0_s3                        
+200004bd  pos0_s4                        
+200004c8  pos0_s5                        
+200004d3  pos0_s6                        
+200004de  pos1_s1                        
+200004e9  pos1_s2                        
+200004f4  pos1_s3                        
+200004ff  pos1_s4                        
+2000050a  pos1_s5                        
+20000515  pos1_s6                        
+20000520  pos2_s1                        
+2000052b  pos2_s2                        
+20000536  pos2_s3                        
+20000541  pos2_s4                        
+2000054c  pos2_s5                        
+20000557  pos2_s6                        
+20000562  pos3_s1                        
+2000056d  pos3_s2                        
+20000578  pos3_s3                        
+20000583  pos3_s4                        
+2000058e  pos3_s5                        
+20000599  pos3_s6                        
+200005a4  pos4_s1                        
+200005af  pos4_s2                        
+200005ba  pos4_s3                        
+200005c5  pos4_s4                        
+200005d0  pos4_s5                        
+200005db  pos4_s6                        
+200005e6  pos5_s1                        
+200005f1  pos5_s2                        
+200005fc  pos5_s3                        
+20000607  pos5_s4                        
+20000612  pos5_s5                        
+2000061d  pos5_s6                        
+20000628  pos6_s1                        
+20000633  pos6_s2                        
+2000063e  pos6_s3                        
+20000649  pos6_s4                        
+20000654  pos6_s5                        
+2000065f  pos6_s6                        
+2000066a  pos7_s1                        
+20000675  pos7_s2                        
+20000680  pos7_s3                        
+2000068b  pos7_s4                        
+20000696  pos7_s5                        
+200006a1  pos7_s6                        
+200006ac  pos8_s1                        
+200006b7  pos8_s2                        
+200006c2  pos8_s3                        
+200006cd  pos8_s4                        
+200006d8  pos8_s5                        
+200006e3  pos8_s6                        
+200006ee  raise_s1                       
+200006f9  raise_s2                       
+20000704  raise_s3                       
+2000070f  raise_s4                       
+2000071a  raise_s5                       
+20000725  raise_s6                       
+20000730  slideO_s1                      
+2000073b  slideO_s2                      
+20000746  slideO_s3                      
+20000751  slideO_s4                      
+2000075c  slideO_s5                      
+20000767  slideO_s6                      
+20000772  slideX_s1                      
+2000077d  slideX_s2                      
+20000788  slideX_s3                      
+20000793  slideX_s4                      
+2000079e  slideX_s5                      
+200007a9  slideX_s6                      
+200007b4  _lock                          
+200007b8  _unlock                        
+200007c4  errno                          
+200007d0  __stack                        
+200009d0  __CIOBUF_                      
+200009d0  __STACK_END                    
+200009d0  __STACK_TOP                    
+20000af0  __TI_tmpnams                   
+20000b90  parmbuf                        
+20000b98  _sys_memory                    
+ffffffff  __TI_pprof_out_hndl            
+ffffffff  __TI_prof_data_size            
+ffffffff  __TI_prof_data_start           
+ffffffff  __binit__                      
+ffffffff  __c_args__                     
+ffffffff  binit                          
+UNDEFED   __mpu_init                     
+UNDEFED   _system_post_cinit             
 
-[170 symbols]
+[252 symbols]

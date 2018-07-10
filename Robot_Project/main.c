@@ -22,6 +22,8 @@ void button_setup(void);
 void onButtonDown(void);
 int coinFlip(void);
 void placePiece(int);
+int determine_winner(void);
+void print_winner(void);
 extern void movement_setup(void);
 extern void moveBlock(int position);
 extern void get_block_from_slide(int);
@@ -32,8 +34,9 @@ int count=-1;
 int robotWonFlip;
 int currentSlide = X;
 int humanTurnDone = 0;
-int gameBoard[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
-//                   0   1   2   3   4   5   6   7   8
+int gameBoard[9] = {-1, -1, -1,
+                    -1, -1, -1,
+                    -1, -1, -1};
 
 int main(void)
 {
@@ -49,10 +52,10 @@ int main(void)
 //
 //    if(robotWonFlip){
 //
-//       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of board
+//       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
 //           placePiece(pos4);
 //       }
-//       else{ // robot plays first X in position 0 (upper left corner of board)
+//       else{ // robot plays first X in position 0 (upper left corner of gameBoard)
 //           placePiece(pos0);
 //       }
 //       while(!humanTurnDone) //wait on human to take their turn
@@ -212,4 +215,40 @@ void placePiece(int pos){
     gameBoard[pos] = currentSlide;
     if(currentSlide == X) {currentSlide = O;}
     else{ currentSlide = X;}
+}
+
+void print_winner(void){
+  char c ;
+  if(determine_winner() == X){c = 'X'; printf("%s\n", &c);}
+  else if(determine_winner() == O){c = 'O'; printf("%s\n", &c);}
+  else{printf("%d\n", determine_winner());}
+}
+
+int determine_winner(void){
+
+    int i;
+    int winner = NO_WINNER;
+    // check rows of gameBoard (3)
+    for(i = 0; i < 3; i++){
+        if(gameBoard[3*i] == gameBoard[3*i+1] && gameBoard[3*i+1] == gameBoard[3*i+2] && gameBoard[3*i] != -1){
+            winner = gameBoard[3*i];
+        }
+    }
+
+    // check columns of gameBoard (3)
+    for(i = 0; i < 3; i++){
+            if(gameBoard[i] == gameBoard[i + 3] && gameBoard[i + 3] == gameBoard[i + 6] && gameBoard[i] != -1){
+                winner = gameBoard[i];
+            }
+        }
+
+    // check diagonals of gameBoard (2)
+    if(gameBoard[0] == gameBoard[4] && gameBoard[4] == gameBoard[8] && gameBoard[0] != -1){
+        winner = gameBoard[0];
+    }
+    if(gameBoard[2] == gameBoard[4] && gameBoard[4] == gameBoard[6] && gameBoard[2] != -1){
+            winner = gameBoard[2];
+        }
+
+    return winner;
 }
