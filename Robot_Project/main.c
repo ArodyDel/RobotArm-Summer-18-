@@ -60,185 +60,203 @@ int main(void)
 //test
     robotWonFlip = coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
 
-    if(robotWonFlip){
+    if(robotWonFlip){ // robot goes first
 
-       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
-           placePiece(pos4);//turn 1
-           humanTurn(); //turn 2
-           int humanTurn2Pos=0;
-           humanTurn2Pos=count;
+      if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
+         placePiece(pos4);//turn 1
+         humanTurn(); //turn 2
+         int humanTurn2Pos=0;
+         humanTurn2Pos=count;
 
-          if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
+        if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
+        {
+          int saveTurn3Move;
+          if(humanTurn2Pos==8)
           {
-            int saveTurn3Move;
-            if(humanTurn2Pos==8)
-            {
-            placePiece(pos0);
-            saveTurn3Move=pos0;
-            }
-            else
-            {
-            placePiece(humanTurn2Pos+2);
-            saveTurn3Move=humanTurn2Pos+2;
-            }
-            humanTurn();//turn4
-            int humanTurn4Pos=0;
-            humanTurn4Pos=count;
-            if(humanTurn4Pos==0||humanTurn4Pos==2||humanTurn4Pos==6||humanTurn4Pos==8)
-            {
-              if(robotWinningMove())
-                {
-                      //gameover
-                }
-              blockHuman();//turn 5
-              humanTurn();//turn 6
-              findRandomOpenSpot();//turn 7
-              humanTurn();//turn 8
-              findRandomOpenSpot();//turn 9
-              //gameover
-
-            }
-            else if(humanTurn4Pos==1||humanTurn4Pos==3||humanTurn4Pos==5||humanTurn4Pos==7)
-            {
-                  if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
-                  {
-                    if(robotWinningMove())
-                    {
-                      //gameover
-                    }
-                    blockHuman();
-                    humanTurn();
-                    if(robotWinningMove())
-                    {
-                      //gameover
-                    }
-
-
-                  }
-                  else{
-                    setupCenterTrap(saveTurn3Move);
-                  }
-                  humanTurn();
-                  robotWinningMove();
-                  //gameover
-            }
-
-
-
+          placePiece(pos0);
+          saveTurn3Move=pos0;
           }
-
           else
           {
-            placePiece(pos8);
+          placePiece(humanTurn2Pos+2);
+          saveTurn3Move=humanTurn2Pos+2;
           }
-         humanTurn()//turn 4;
-
-         if(robotWinningMove())
+          humanTurn();//turn4
+          int humanTurn4Pos=0;
+          humanTurn4Pos=count;
+          if(humanTurn4Pos==0||humanTurn4Pos==2||humanTurn4Pos==6||humanTurn4Pos==8)
           {
-                     //gameover
+            if(robotWinningMove())
+              {
+                    gameOver();
+              }
+            else
+            {
+              blockHuman();//turn 5
+            }
+            humanTurn();//turn 6
+            if(findRandomOpenSpot()){
+              gameOver();
+            }//turn 7
+            humanTurn();//turn 8
+            findRandomOpenSpot();//turn 9
+            gameOver();
 
-         }
-         blockHuman();
-
-         humanTurn()//turn 6
-
-         if(robotWinningMove())
+          }
+          else if(humanTurn4Pos==1||humanTurn4Pos==3||humanTurn4Pos==5||humanTurn4Pos==7)
           {
-                     //gameover
+                if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
+                {
+                  if(robotWinningMove())
+                  {
+                    gameOver();
+                  }
+                  else{
+                    blockHuman();
+                  }
+
+                  humanTurn();
+                  if(robotWinningMove())
+                  {
+                    gameOver();
+                  }
+
+
+                }
+                else{
+                  setupCenterTrap(saveTurn3Move);
+                }
+                humanTurn();
+                robotWinningMove();
+                gameOver();
           }
 
 
+
+        }
+
+        else
+        {
+          placePiece(pos8);
+        }
+       humanTurn();//turn 4;
+
+       if(robotWinningMove())
+        {
+                   gameOver();
 
        }
-       else{ // robot plays first X in position 0 (lower left corner of gameBoard)
-
-           placePiece(pos6);//turn 1
-           humanTurn();
-           int humanTurn2Pos=0;
-           humanTurn2Pos=count;
+       else{
+         blockHuman();
+       }
 
 
-            if(humanTurn2Pos==1||humanTurn2Pos==7||humanTurn2Pos=8) //turn 2 played position 1,7,or8
-               {
+       humanTurn();//turn 6
 
-                   placePiece(pos0);
-                   humanTurn();
-                    //check can i win
-                 //if true
-                 if(gameBoard[3]!=O)
-                 {
-                   placePiece(pos3);
-                   //gameover
-                 }
+       if(robotWinningMove())
+        {
+                   gameOver();
+        }
+      }
+      else{ // robot plays first X in position 0 (lower left corner of gameBoard)
 
-                 //if not true
-                  else{ placePiece(pos8);}
-                   humanTurn();
-                   if(gameBoard[4]==O)
-                   {
-                   placePiece(pos7);
-                   }
-                   else{placePiece(pos4);}
-                   //gameover
+         placePiece(pos6);//turn 1
+         humanTurn();
+         int humanTurn2Pos=0;
+         humanTurn2Pos=count;
 
-               }
-               else if(humanTurn2Pos==4)) //turn 2 played center
-               {
-                   placePiece(4);//turn3
-                   humanTurn();//turn4
-                   if(gameBoard[0]==O)
-                   {
-                     placePiece(8);
-                   }
-                   else if(gameBoard[8]==O)
-                   {
-                     placePiece(0);
-                   }
-                   else
-                   {
-                     //block human
-                     blockHuman();
-                   }
-                   humanTurn();//turn 6
-                   if(robotWinningMove())
-                   {
-                     //gameover
-                   }
-                   blockHuman();
 
-                   humanTurn();//turn8
-                   if(robotWinningMove())
-                   {
-                     //gameover
-                   }
-                   blockHuman();
-                  //gameover
+          if(humanTurn2Pos==1||humanTurn2Pos==7||humanTurn2Pos==8) //turn 2 played position 1,7,or8
+             {
 
-               }
-               else //turn 2 played any other spot
-               {
-                   placePiece(pos8);//turn 3
-                   humanTurn();//turn 4
+                 placePiece(pos0);
+                 humanTurn();
                   //check can i win
+               //if true
+               if(gameBoard[3]!=O)
+               {
+                 placePiece(pos3);
+                 gameOver();
+                }
 
-                 //if true
-                 if(gameBoard[7]!=O)
+               //if not true
+                else{ placePiece(pos8);}
+                 humanTurn();
+                 if(gameBoard[4]==O)
                  {
-                   placePiece(pos7);//turn 5
-                   //gameover
+                 placePiece(pos7);
+                 }
+                 else{placePiece(pos4);}
+                 gameOver();
+
+             }
+             else if(humanTurn2Pos==4) //turn 2 played center
+             {
+                 placePiece(2);//turn3
+                 humanTurn();//turn4
+                 if(gameBoard[0]==O)
+                 {
+                   placePiece(8);
+                 }
+                 else if(gameBoard[8]==O)
+                 {
+                   placePiece(0);
+                 }
+                 else
+                 {
+                   //block human
+                   blockHuman();
+                 }
+                 humanTurn();//turn 6
+                 if(robotWinningMove())
+                 {
+                   gameOver();
+                 }
+                 else
+                 {
+                   blockHuman();
                  }
 
-                 //if not true
-                   placePiece(pos2);//turn 5
-                   humanTurn();//turn 6
-                   if(gameBoard[4]==O)
-                   {
-                   placePiece(pos5);//turn 7
-                   }
-                   placePiece(pos4);//turn 7
-                   //gameover
-   }
+                 humanTurn();//turn8
+                 if(robotWinningMove())
+                 {
+                   gameOver();
+                 }
+                 else
+                 {
+                   blockHuman();
+                 }
+                gameOver();
 
+             }
+             else //turn 2 played any other spot
+             {
+                 placePiece(pos8);//turn 3
+                 humanTurn();//turn 4
+                //check can i win
+
+               //if true
+               if(gameBoard[7]!=O)
+               {
+                 placePiece(pos7);//turn 5
+                 gameOver();
+               }
+
+               //if not true
+                 placePiece(pos2);//turn 5
+                 humanTurn();//turn 6
+                 if(gameBoard[4]==O)
+                 {
+                 placePiece(pos5);//turn 7
+                 }
+                 placePiece(pos4);//turn 7
+                 gameOver();
+              }
+      }
+    }
+    else{ // human goes first
+
+    }
     return 0;
 }
 
@@ -467,6 +485,14 @@ int findRandomOpenSpot(void)
            for(int i=0;i<9;i++)
            {
              if(gameBoard[i]==-1&& (i==1||i==3||i==5||i==7))
+             {
+               placePiece(i);
+               return 0;
+             }
+           }
+           for(int i=0;i<9;i++)
+           {
+             if(gameBoard[i]==-1&& (i==0||i==2||i==6||i==8))
              {
                placePiece(i);
                return 0;
