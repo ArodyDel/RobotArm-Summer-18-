@@ -29,10 +29,11 @@ int whereCanRobotWin(void);
 int whereCanHumanWin(void);
 void gameOver(void);
 void initializeGameBoard(void);
-void blockHuman(void);
+int blockHuman(void);
 int robotWinningMove(void);
 int findRandomOpenSpot(void);
 void setupCenterTrap(int);
+int rollRandom4(void);
 extern void movement_setup(void);
 extern void moveBlock(int position);
 extern void get_block_from_slide(int);
@@ -65,8 +66,7 @@ int main(void)
       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
          placePiece(pos4);//turn 1
          humanTurn(); //turn 2
-         int humanTurn2Pos=0;
-         humanTurn2Pos=count;
+		 int humanTurn2Pos = count;
 
         if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
         {
@@ -255,6 +255,66 @@ int main(void)
       }
     }
     else{ // human goes first
+		humanTurn();	//turn 1
+		int humanTurn1 = count;
+		if (humanTurn1 == 0 || humanTurn1 == 2 || humanTurn1 == 6 || humanTurn1 == 8)
+		{	//turn2
+			placePiece(POS4);
+		}
+		else if (humanTurn1 == 1 || humanTurn1 == 7 || humanTurn1 == 3 || humanTurn1 == 5)
+		{	
+			//turn 2
+			if (humanTurn1 == 3 || humanTurn1 == 5)
+			{
+				placePiece(humanTurn1 + 3);
+			}
+			else
+			{
+				placePiece(humanTurn1 + 1);
+			}
+		}
+		else
+		{	//turn 2
+			int randCorner=rollRandom4()*3;
+			if (randCorner == 1 || randConrner == 3)
+			{
+				randCorner--;
+			}
+			placePiece(randCorner);
+
+			humanTurn(); //turn 3
+			if (blockHuman()) //turn 4
+			{
+				humanTurn();//turn 5
+				if (robotWinningMove()
+				{	
+					//turn 6
+					//gameover
+				}
+				else
+				{
+					if (!blockHuman())
+					{
+						findRandomOpenSpot(); //turn 6
+					}
+					humanTurn();//turn 7
+
+					if (robotWinningMove())
+					{
+						//gameover
+					}
+
+				}
+
+			}
+			else
+			{
+
+			}
+		}
+		
+
+
 
     }
     return 0;
@@ -404,6 +464,12 @@ int coinFlip(void){
   return rand() % 2;
 }
 
+int rollRandom4(void)
+{
+	srand(time(0));
+	return rand() % 4;
+}
+
 void placePiece(int pos){
     get_block_from_slide(currentSlide);
     moveBlock(pos);
@@ -458,13 +524,15 @@ int determine_winner(void){
 }
 
 
-void blockHuman(void)
+int blockHuman(void)
 {
          int check=whereCanPlayerWin(O);
          if(check!=-1)
          {
            placePiece(check);
+		   return 1;
          }
+		 return 0;
 }
 int robotWinningMove(void)
 {
@@ -506,7 +574,18 @@ int findRandomOpenSpot(void)
          }
 
 }
-
+void findEmtpyCorner(void)
+{
+	//find a conrer
+	int i;
+	for (i = 0; i < 9; i + 2)
+	{
+		if (gameBoard[i] == -1)
+		{
+			placePiece(i);
+		}
+	}
+}
 void setupCenterTrap(int saveTurn3Move)
 {
   if(saveTurn3Move==(0|6))
