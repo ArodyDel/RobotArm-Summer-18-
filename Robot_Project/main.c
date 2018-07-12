@@ -257,11 +257,49 @@ int main(void)
     else{ // human goes first
 		humanTurn();	//turn 1
 		int humanTurn1 = count;
-		if (humanTurn1 == 0 || humanTurn1 == 2 || humanTurn1 == 6 || humanTurn1 == 8)
+		if (humanTurn1 == 0 || humanTurn1 == 2 || humanTurn1 == 6 || humanTurn1 == 8) //human played corner
 		{	//turn2
 			placePiece(POS4);
+			humanTurn();//turn 3
+			if(!blockHuman())
+			{
+				//turn 4 
+				if (count == 1 ||  count == 7)
+				{
+					if(gameBoard[count+1]==-1)
+					{
+						placePiece(count+1);
+					}
+					else
+					{
+						placePiece(count-1);
+					}
+					
+				}
+				else if(count == 3||count==5)
+				{
+					if(gameBoard[count+3]==-1)
+					{
+						placePiece(count+3);
+					}
+					else
+					{
+						placePiece(count-3);
+					}
+				}
+				else
+				{
+					findEmtpyEdge();
+					
+				}
+				playOutTiedGame();
+			}
+			else
+			{
+				
+			}
 		}
-		else if (humanTurn1 == 1 || humanTurn1 == 7 || humanTurn1 == 3 || humanTurn1 == 5)
+		else if (humanTurn1 == 1 || humanTurn1 == 7 || humanTurn1 == 3 || humanTurn1 == 5)//human played edge
 		{	
 			//turn 2
 			if (humanTurn1 == 3 || humanTurn1 == 5)
@@ -272,44 +310,33 @@ int main(void)
 			{
 				placePiece(humanTurn1 + 1);
 			}
+			humanTurn(); //turn 3
+			if(!blockHuman())
+			{
+				placePiece(pos4);
+			}
+			playOutTiedGame();
+			
 		}
-		else
-		{	//turn 2
+		else //human played center
+		{	
 			int randCorner=rollRandom4()*3;
 			if (randCorner == 1 || randConrner == 3)
 			{
 				randCorner--;
 			}
-			placePiece(randCorner);
+			placePiece(randCorner);//turn2
 
 			humanTurn(); //turn 3
 			if (blockHuman()) //turn 4
 			{
-				humanTurn();//turn 5
-				if (robotWinningMove()
-				{	
-					//turn 6
-					//gameover
-				}
-				else
-				{
-					if (!blockHuman())
-					{
-						findRandomOpenSpot(); //turn 6
-					}
-					humanTurn();//turn 7
-
-					if (robotWinningMove())
-					{
-						//gameover
-					}
-
-				}
+				playOutTiedGame();
 
 			}
 			else
 			{
-
+				findEmtpyCorner();//turn 4
+				playOutTiedGame();
 			}
 		}
 		
@@ -544,9 +571,45 @@ int robotWinningMove(void)
          }
          return 0;
 }
+
+
+void playOutTiedGame(void)
+{
+	humanTurn();//turn 5
+	if (robotWinningMove()
+	{	
+		//turn 6
+		//gameover
+	}
+	else
+	{
+		if (!blockHuman())
+		{
+			findRandomOpenSpot(); //turn 6
+		}
+		humanTurn();//turn 7
+
+		if (robotWinningMove())
+		{
+			//gameover
+		}
+		else
+	    {
+			if(!blockHuman())
+			{
+				findRandomOpenSpot();
+			}
+			humanTurn();
+			//gameOver
+		}
+		
+
+	}						
+}
+
 //find randomOpenSpot checks if we can make a winning move overwise move towards a tied game
 int findRandomOpenSpot(void)
-{
+{	
   int check=whereCanPlayerWin(X);
          if(check==-1)
          {
@@ -574,6 +637,20 @@ int findRandomOpenSpot(void)
          }
 
 }
+
+void findEmtpyEdge(void)
+{
+	//find a conrer
+	int i;
+	for (i = 1; i < 9; i + 2)
+	{
+		if (gameBoard[i] == -1)
+		{
+			placePiece(i);
+		}
+	}
+}
+
 void findEmtpyCorner(void)
 {
 	//find a conrer
