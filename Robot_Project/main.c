@@ -34,6 +34,11 @@ int robotWinningMove(void);
 int findRandomOpenSpot(void);
 void setupCenterTrap(int);
 int rollRandom4(void);
+void playOutTiedGame(void);
+void findEmtpyEdge(void);
+void findEmtpyCorner(void);
+int whereCanPlayerWin(int player);
+
 extern void movement_setup(void);
 extern void moveBlock(int position);
 extern void get_block_from_slide(int);
