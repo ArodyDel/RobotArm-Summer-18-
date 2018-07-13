@@ -29,10 +29,16 @@ int whereCanRobotWin(void);
 int whereCanHumanWin(void);
 void gameOver(void);
 void initializeGameBoard(void);
-void blockHuman(void);
+int blockHuman(void);
 int robotWinningMove(void);
 int findRandomOpenSpot(void);
 void setupCenterTrap(int);
+int rollRandom4(void);
+void playOutTiedGame(void);
+void findEmtpyEdge(void);
+void findEmtpyCorner(void);
+int whereCanPlayerWin(int player);
+
 extern void movement_setup(void);
 extern void moveBlock(int position);
 extern void get_block_from_slide(int);
@@ -65,8 +71,7 @@ int main(void)
       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
          placePiece(pos4);//turn 1
          humanTurn(); //turn 2
-         int humanTurn2Pos=0;
-         humanTurn2Pos=count;
+		 int humanTurn2Pos = count;
 
         if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
         {
@@ -255,6 +260,93 @@ int main(void)
       }
     }
     else{ // human goes first
+		humanTurn();	//turn 1
+		int humanTurn1 = count;
+		if (humanTurn1 == 0 || humanTurn1 == 2 || humanTurn1 == 6 || humanTurn1 == 8) //human played corner
+		{	//turn2
+			placePiece(POS4);
+			humanTurn();//turn 3
+			if(!blockHuman())
+			{
+				//turn 4 
+				if (count == 1 ||  count == 7)
+				{
+					if(gameBoard[count+1]==-1)
+					{
+						placePiece(count+1);
+					}
+					else
+					{
+						placePiece(count-1);
+					}
+					
+				}
+				else if(count == 3||count==5)
+				{
+					if(gameBoard[count+3]==-1)
+					{
+						placePiece(count+3);
+					}
+					else
+					{
+						placePiece(count-3);
+					}
+				}
+				else
+				{
+					findEmtpyEdge();
+					
+				}
+				playOutTiedGame();
+			}
+			else
+			{
+				
+			}
+		}
+		else if (humanTurn1 == 1 || humanTurn1 == 7 || humanTurn1 == 3 || humanTurn1 == 5)//human played edge
+		{	
+			//turn 2
+			if (humanTurn1 == 3 || humanTurn1 == 5)
+			{
+				placePiece(humanTurn1 + 3);
+			}
+			else
+			{
+				placePiece(humanTurn1 + 1);
+			}
+			humanTurn(); //turn 3
+			if(!blockHuman())
+			{
+				placePiece(pos4);
+			}
+			playOutTiedGame();
+			
+		}
+		else //human played center
+		{	
+			int randCorner=rollRandom4()*3;
+			if (randCorner == 1 || randConrner == 3)
+			{
+				randCorner--;
+			}
+			placePiece(randCorner);//turn2
+
+			humanTurn(); //turn 3
+			if (blockHuman()) //turn 4
+			{
+				playOutTiedGame();
+
+			}
+			else
+			{
+				findEmtpyCorner();//turn 4
+				playOutTiedGame();
+			}
+		}
+		
+
+
 
     }
     return 0;
@@ -404,6 +496,12 @@ int coinFlip(void){
   return rand() % 2;
 }
 
+int rollRandom4(void)
+{
+	srand(time(0));
+	return rand() % 4;
+}
+
 void placePiece(int pos){
     get_block_from_slide(currentSlide);
     moveBlock(pos);
@@ -458,13 +556,15 @@ int determine_winner(void){
 }
 
 
-void blockHuman(void)
+int blockHuman(void)
 {
          int check=whereCanPlayerWin(O);
          if(check!=-1)
          {
            placePiece(check);
+		   return 1;
          }
+		 return 0;
 }
 int robotWinningMove(void)
 {
@@ -476,9 +576,45 @@ int robotWinningMove(void)
          }
          return 0;
 }
+
+
+void playOutTiedGame(void)
+{
+	humanTurn();//turn 5
+	if (robotWinningMove()
+	{	
+		//turn 6
+		//gameover
+	}
+	else
+	{
+		if (!blockHuman())
+		{
+			findRandomOpenSpot(); //turn 6
+		}
+		humanTurn();//turn 7
+
+		if (robotWinningMove())
+		{
+			//gameover
+		}
+		else
+	    {
+			if(!blockHuman())
+			{
+				findRandomOpenSpot();
+			}
+			humanTurn();
+			//gameOver
+		}
+		
+
+	}						
+}
+
 //find randomOpenSpot checks if we can make a winning move overwise move towards a tied game
 int findRandomOpenSpot(void)
-{
+{	
   int check=whereCanPlayerWin(X);
          if(check==-1)
          {
@@ -507,6 +643,31 @@ int findRandomOpenSpot(void)
 
 }
 
+void findEmtpyEdge(void)
+{
+	//find a conrer
+	int i;
+	for (i = 1; i < 9; i + 2)
+	{
+		if (gameBoard[i] == -1)
+		{
+			placePiece(i);
+		}
+	}
+}
+
+void findEmtpyCorner(void)
+{
+	//find a conrer
+	int i;
+	for (i = 0; i < 9; i + 2)
+	{
+		if (gameBoard[i] == -1)
+		{
+			placePiece(i);
+		}
+	}
+}
 void setupCenterTrap(int saveTurn3Move)
 {
   if(saveTurn3Move==(0|6))
