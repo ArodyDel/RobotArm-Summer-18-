@@ -43,6 +43,7 @@ extern void movement_setup(void);
 extern void moveBlock(int position);
 extern void get_block_from_slide(int);
 extern void initialize(void);
+extern void test_slides_exhaustively(void);
 
 unsigned char Mask7seg=0x01;
 int count=-1;
@@ -60,11 +61,9 @@ int main(void)
     button_setup();
     movement_setup();
 
-
-//test
     robotWonFlip = coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
 
-    if(0){ // robot goes first
+    if(robotWonFlip){ // robot goes first
 
       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
          placePiece(POS4);//turn 1

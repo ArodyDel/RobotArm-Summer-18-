@@ -84,6 +84,8 @@
 #define H16_5 0x06
 #define L17 0xa4
 #define H17 0x06
+#define L17_5 0xd6
+#define H17_5 0x06
 #define L18 0x08
 #define H18 0x07
 #define L18_25 0x21
