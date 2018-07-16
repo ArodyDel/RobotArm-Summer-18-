@@ -35,8 +35,8 @@ int findRandomOpenSpot(void);
 void setupCenterTrap(int);
 int rollRandom4(void);
 void playOutTiedGame(void);
-void findEmtpyEdge(void);
-void findEmtpyCorner(void);
+void findEmptyEdge(void);
+void findEmptyCorner(void);
 int whereCanPlayerWin(int player);
 
 extern void movement_setup(void);
@@ -60,13 +60,11 @@ int main(void)
     button_setup();
     movement_setup();
 
-//     while(1){
 
-//     }
 //test
     robotWonFlip = coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
 
-    if(robotWonFlip){ // robot goes first
+    if(0){ // robot goes first
 
       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
          placePiece(POS4);//turn 1
@@ -294,7 +292,7 @@ int main(void)
                 }
                 else
                 {
-                    findEmtpyEdge();
+                    findEmptyEdge();
 
                 }
                 playOutTiedGame();
@@ -340,7 +338,7 @@ int main(void)
             }
             else
             {
-                findEmtpyCorner();//turn 4
+                findEmptyCorner();//turn 4
                 playOutTiedGame();
             }
         }
@@ -363,7 +361,7 @@ void onButtonDown(void) {
         //TrigSensor();
         // Configure PF4 for rising edge trigger
 
-        GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+        //GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
 
         if(count == 8){count = -1;}
         if(gameBoard[count + 1] == -1){
@@ -443,12 +441,12 @@ void onButtonDown(void) {
         //GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
         SysCtlDelay(4000000); //delay
         GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_4);  // Clear interrupt flag
-        humanTurnDone = 1;
+        //humanTurnDone = 1;
 
     }
     else if (GPIOIntStatus(GPIO_PORTF_BASE, false) & GPIO_PIN_0) {       // sw2 interrupt handle
 
-        GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+        //GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
 
         Mask7seg=0x40;
         GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
@@ -521,8 +519,9 @@ void print_winner(void){
 void humanTurn(void){
     GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     while(!humanTurnDone){ //wait on human to take their turn
-
+        //GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     }
+    GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     humanTurnDone=0;     // reset flag
 }
 
@@ -644,11 +643,11 @@ int findRandomOpenSpot(void)
 
 }
 
-void findEmtpyEdge(void)
+void findEmptyEdge(void)
 {
-    //find a conrer
+    //find a corner
     int i;
-    for (i = 1; i < 9; i + 2)
+    for (i = 1; i < 9; i += 2)
     {
         if (gameBoard[i] == -1)
         {
@@ -657,11 +656,11 @@ void findEmtpyEdge(void)
     }
 }
 
-void findEmtpyCorner(void)
+void findEmptyCorner(void)
 {
     //find a conrer
     int i;
-    for (i = 0; i < 9; i + 2)
+    for (i = 0; i < 9; i += 2)
     {
         if (gameBoard[i] == -1)
         {
