@@ -49,10 +49,10 @@ int main(void)
           GPIO_FALLING_EDGE);             // Configure PF4 for falling edge trigger
       GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4);     // Enable interrupt for PF4
 
-
+    //ADC setup
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
-    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_3);
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_3);    //connected to PE3
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_ADC0))
     {
 
@@ -79,14 +79,14 @@ int main(void)
 }
 
 void TrigSensor()
-{   ADCProcessorTrigger(ADC0_BASE,0);
-    while(!ADCIntStatus(ADC0_BASE,0, false));
+{   ADCProcessorTrigger(ADC0_BASE,0);   //start sample
+    while(!ADCIntStatus(ADC0_BASE,0, false));  // wait till the status changes
         {
 
         }
-        ADCSequenceDataGet(ADC0_BASE, 0, &ui32Value);
+        ADCSequenceDataGet(ADC0_BASE, 0, &ui32Value); // read data
         float FsrVolt=ui32Value*5/1023.0;
-        float FsrResist=3270.0*(5/FsrVolt-1.0);
+        float FsrResist=3270.0*(5/FsrVolt-1.0); //voltage divider using a 3270 ohm resistor
         float FsrG=1.0/FsrResist;
         float force;
         if(FsrResist<=600)
