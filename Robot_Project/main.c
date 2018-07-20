@@ -16,6 +16,8 @@
 #include "driverlib/sysctl.h"
 #include "utils/uartstdio.h"
 #include "driverlib/uart.h"
+#include "inc/tm4c123gh6pm.h"
+#include "driverlib/timer.h"
 
 
 void button_setup(void);
@@ -38,6 +40,11 @@ void playOutTiedGame(void);
 void findEmptyEdge(void);
 void findEmptyCorner(void);
 int whereCanPlayerWin(int player);
+void force_sensor_setup(void);
+float TrigSensor(void);
+void displayH_OR_R_7SEG(int);
+void flashWinner7seg(int);
+//void timer_init(void);
 
 extern void movement_setup(void);
 extern void moveBlock(int position);
@@ -54,16 +61,33 @@ int gameBoard[9] = {-1, -1, -1,
                     -1, -1, -1,
                     -1, -1, -1};
 int startNewGameSelected = 0;
+uint32_t ui32Value;
+uint32_t randseed;
+int offset = 0;
 
 int main(void)
 {
     //setup
-    button_setup();
-    movement_setup();
+    //timer_init();
 
-    robotWonFlip = coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
+    movement_setup();
+    force_sensor_setup();
+
+    randseed = 0;
+    while(TrigSensor() > 10000){
+        randseed++;
+        if(randseed == 3000000000){
+            randseed = 0;
+        }
+    }
+
+    button_setup();
+
+    robotWonFlip = coinFlip(); //coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
 
     if(robotWonFlip){ // robot goes first
+
+      displayH_OR_R_7SEG(ROBOT);
 
       if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
          placePiece(POS4);//turn 1
@@ -257,6 +281,7 @@ int main(void)
       }
     }
     else{ // human goes first
+        displayH_OR_R_7SEG(HUMAN);
         humanTurn();    //turn 1
         int humanTurn1 = count;
         if (humanTurn1 == 0 || humanTurn1 == 2 || humanTurn1 == 6 || humanTurn1 == 8) //human played corner
@@ -330,13 +355,16 @@ int main(void)
             placePiece(randCorner);//turn2
 
             humanTurn(); //turn 3
+            //UARTprintf("end turn 3\n");
             if (blockHuman()) //turn 4
             {
+                //UARTprintf("entering playOutTiedGame\n");
                 playOutTiedGame();
 
             }
             else
             {
+                //UARTprintf("entering findEmptyCorner\n");
                 findEmptyCorner();//turn 4
                 playOutTiedGame();
             }
@@ -485,24 +513,105 @@ void button_setup(void){
     GPIOIntRegister(GPIO_PORTF_BASE, onButtonDown);     // Register our handler function for port F
     GPIOIntTypeSet(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0,
                    GPIO_FALLING_EDGE);             // Configure PF4 for falling edge trigger
-    GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+//    GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+}
+
+float TrigSensor(void)
+{
+    ADCProcessorTrigger(ADC0_BASE,0);   //start sample
+    while(!ADCIntStatus(ADC0_BASE,0, false));  // wait till the status changes
+    {
+
+    }
+    ADCSequenceDataGet(ADC0_BASE, 0, &ui32Value); // read data
+    float FsrVolt=ui32Value*5/1023.0;
+    float FsrResist=3270.0*(5/FsrVolt-1.0); //voltage divider using a 3270 ohm resistor
+    float FsrG=1.0/FsrResist;
+    float force;
+    if(FsrResist<=600)
+    {
+        force=(FsrG-0.00075)/0.00000032639;
+    }
+    else
+    {
+        force=FsrG/0.000000642857;
+    }
+    float test = 65.0004;
+    return FsrResist;
+//    UARTprintf("Resistance: %d ohms \n",(int)FsrResist);
+//    UARTprintf("Resistance: %d g\n",(int)force);
+}
+
+void force_sensor_setup(void){
+    //ADC setup
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+    GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_3);    //connected to PE3
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_ADC0))
+    {
+
+    }
+    ADCSequenceConfigure(ADC0_BASE,0, ADC_TRIGGER_PROCESSOR,0);
+    ADCSequenceStepConfigure(ADC0_BASE, 0, 0,
+                             ADC_CTL_IE | ADC_CTL_END | ADC_CTL_CH0);
+    ADCSequenceEnable(ADC0_BASE,0);
+    ADCProcessorTrigger(ADC0_BASE,0);
+    while(!ADCIntStatus(ADC0_BASE,0, false));
+    {
+
+    }
+    ADCSequenceDataGet(ADC0_BASE, 0, &ui32Value);
+
+    // setup timer for use with random.c function
+    //SysTickPeriodSet(100);
+    //SysTickEnable();
 }
 
 int coinFlip(void){
-  srand(time(0));
-  return rand() % 2;
+//    RandomAddEntropy(SysTickValueGet());
+//    return RandomSeed()&0x01;
+//    srand(time(0));
+//    return rand()%2;
+//    uint32_t currentTime = TimerValueGet(TIMER0_BASE, TIMER_A);
+//    return ((currentTime & 0x02) >> 1);
+      uint32_t shifter = 0x01 << offset;
+      uint32_t randNum = (randseed & shifter) >> offset;
+      offset++;
+      if(offset == 31){offset = 0;}
+      return randNum;
 }
 
 int rollRandom4(void)
 {
-    srand(time(0));
-    return rand() % 4;
+//    RandomAddEntropy(SysTickValueGet());
+//    return RandomSeed()&0x03;
+//    srand(time(0));
+//    return rand()%4;
+//    uint32_t currentTime = TimerValueGet(TIMER0_BASE, TIMER_A);
+//    uint32_t bit0 = (currentTime & 0x02) >> 1;
+//    uint32_t bit1 = (currentTime & 0x04) >> 1;
+//    uint32_t result = bit0 + bit1;
+//    return result;
+      uint32_t shifter = 0x01 << offset;
+      uint32_t bit0 = (randseed & shifter) >> offset;
+      shifter = shifter << 1;
+      uint32_t bit1 = (randseed & shifter) >> offset;
+      offset++;
+      if(offset == 30){offset = 0;}
+      uint32_t randNum = bit0 + bit1;
+      return randNum;
 }
 
 void placePiece(int pos){
     get_block_from_slide(currentSlide);
     moveBlock(pos);
-    gameBoard[pos] = currentSlide;
+    if(robotWonFlip == 1){
+        gameBoard[pos] = currentSlide;
+    }
+    else{ //human won flip
+        if(currentSlide == X){gameBoard[pos] = O;}
+        else{gameBoard[pos] = X;}
+    }
     if(currentSlide == X) {currentSlide = O;}
     else{ currentSlide = X;}
 }
@@ -516,12 +625,14 @@ void print_winner(void){
 
 
 void humanTurn(void){
+    displayH_OR_R_7SEG(HUMAN);
     GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     while(!humanTurnDone){ //wait on human to take their turn
         //GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     }
     GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     humanTurnDone=0;     // reset flag
+    displayH_OR_R_7SEG(ROBOT);
 }
 
 int determine_winner(void){
@@ -556,12 +667,15 @@ int determine_winner(void){
 
 int blockHuman(void)
 {
+         //UARTprintf("entering blockHuman\n");
          int check=whereCanPlayerWin(O);
          if(check!=-1)
          {
            placePiece(check);
+           //UARTprintf("returned 1 from blockHuman\n");
            return 1;
          }
+         //UARTprintf("returned 0 from blockHuman\n");
          return 0;
 }
 int robotWinningMove(void)
@@ -579,31 +693,35 @@ int robotWinningMove(void)
 void playOutTiedGame(void)
 {
     humanTurn();//turn 5
-    if (robotWinningMove())
+    if (robotWinningMove() == 1)
     {
+        UARTprintf("robot won the game\n");
         //turn 6
-        //gameover
+        gameOver();
     }
     else
     {
-        if (!blockHuman())
+        //UARTprintf("entering turn 6 (miracle on ice)\n");
+        if (blockHuman() == 0)
         {
+            //UARTprintf("turn 6 random\n");
             findRandomOpenSpot(); //turn 6
         }
+        //UARTprintf("human turn 7\n");
         humanTurn();//turn 7
 
         if (robotWinningMove())
         {
-            //gameover
+            gameOver();
         }
         else
         {
-            if(!blockHuman())
+            if(blockHuman() == 0)
             {
                 findRandomOpenSpot();
             }
             humanTurn();
-            //gameOver
+            gameOver();
         }
 
 
@@ -651,25 +769,27 @@ void findEmptyEdge(void)
         if (gameBoard[i] == -1)
         {
             placePiece(i);
+            break;
         }
     }
 }
 
 void findEmptyCorner(void)
 {
-    //find a conrer
+    //find a corner
     int i;
     for (i = 0; i < 9; i += 2)
     {
         if (gameBoard[i] == -1)
         {
             placePiece(i);
+            break;
         }
     }
 }
 void setupCenterTrap(int saveTurn3Move)
 {
-  if(saveTurn3Move==(0|6))
+  if(saveTurn3Move==0 || saveTurn3Move==6)
                     {
                       if(gameBoard[saveTurn3Move+1]==-1)
                       {
@@ -748,9 +868,17 @@ int whereCanPlayerWin(int player){
 }
 
 void gameOver(void){
-  while(!startNewGameSelected){
-
+  int winner = determine_winner();
+  if(winner == -1){
+      flashWinner7seg(TIE);
   }
+  else if(winner == X){
+      flashWinner7seg(ROBOT);
+  }
+  else if(winner == O){
+      flashWinner7seg(HUMAN);
+  }
+  while(1){/*waiting for reset button press*/}
 }
 
 void initializeGameBoard(void){
@@ -759,3 +887,43 @@ void initializeGameBoard(void){
     gameBoard[i] = -1;
   }
 }
+
+void displayH_OR_R_7SEG(int player){
+    switch (player)
+    {
+    case HUMAN:
+        Mask7seg=0x74;  // Display h on 7 seg when it's the human's turn
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+    case ROBOT:
+        Mask7seg=0x50;  // Display r on 7 seg when it's the human's turn
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+    case TIE:
+        Mask7seg=0x41;  // Display r on 7 seg when it's the human's turn
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                    GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+    default:
+        break;
+    }
+}
+
+void flashWinner7seg(int player){
+    while(1){
+        displayH_OR_R_7SEG(player);
+        SysCtlDelay(2500000);
+        Mask7seg=0x00;
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        SysCtlDelay(2500000);
+    }
+}
+
+//void timer_init(void){
+//    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+//    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);   // 32 bits Timer
+//    TimerEnable(TIMER0_BASE, TIMER_A);
+//}
