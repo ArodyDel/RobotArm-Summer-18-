@@ -44,7 +44,14 @@ void force_sensor_setup(void);
 float TrigSensor(void);
 void displayH_OR_R_7SEG(int);
 void flashWinner7seg(int);
-//void timer_init(void);
+void easyMode(void);
+void challengeMode(void);
+int findSetupForWin(void);
+int rollRandom8(void);
+int rollRandom9(void);
+void humanVsHuman(void);
+void humanVsRobot(void);
+
 
 extern void movement_setup(void);
 extern void moveBlock(int position);
@@ -65,10 +72,10 @@ uint32_t ui32Value;
 uint32_t randseed;
 int offset = 0;
 
+int rightButtonCounter = 0;
+
 int main(void)
 {
-    //setup
-    //timer_init();
 
     movement_setup();
     force_sensor_setup();
@@ -83,7 +90,11 @@ int main(void)
 
     button_setup();
 
-    robotWonFlip = coinFlip(); //coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
+
+
+    robotWonFlip = coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
+
+    //easyMode();
 
     if(robotWonFlip){ // robot goes first
 
@@ -323,7 +334,7 @@ int main(void)
             }
             else
             {
-
+                playOutTiedGame();
             }
         }
         else if (humanTurn1 == 1 || humanTurn1 == 7 || humanTurn1 == 3 || humanTurn1 == 5)//human played edge
@@ -383,6 +394,8 @@ void onButtonDown(void) {
 
 
     if (GPIOIntStatus(GPIO_PORTF_BASE, false) & GPIO_PIN_4) {       //sw1 button handler
+//        GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+//        UARTprintf("\nI am in button 1\n");
         // PF4 was interrupt cause
         //UARTprintf("Button Down\n");
         //TrigSensor();
@@ -465,15 +478,18 @@ void onButtonDown(void) {
             break;
         }
 
-        //GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+//        GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
         SysCtlDelay(4000000); //delay
         GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_4);  // Clear interrupt flag
         //humanTurnDone = 1;
 
     }
     else if (GPIOIntStatus(GPIO_PORTF_BASE, false) & GPIO_PIN_0) {       // sw2 interrupt handle
+        //rightButtonCounter++;
+//        UARTprintf("\n%d\n", rightButtonCounter);
 
-        //GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+//        GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+//        UARTprintf("\nI am at button 2\n");
 
         Mask7seg=0x40;
         GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
@@ -484,7 +500,8 @@ void onButtonDown(void) {
             humanTurnDone = 1;
         }
 
-        //GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+
+//        GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
         SysCtlDelay(4000000);
         GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_0);  // Clear interrupt flag
 
@@ -561,45 +578,49 @@ void force_sensor_setup(void){
 
     }
     ADCSequenceDataGet(ADC0_BASE, 0, &ui32Value);
-
-    // setup timer for use with random.c function
-    //SysTickPeriodSet(100);
-    //SysTickEnable();
 }
 
 int coinFlip(void){
-//    RandomAddEntropy(SysTickValueGet());
-//    return RandomSeed()&0x01;
-//    srand(time(0));
-//    return rand()%2;
-//    uint32_t currentTime = TimerValueGet(TIMER0_BASE, TIMER_A);
-//    return ((currentTime & 0x02) >> 1);
       uint32_t shifter = 0x01 << offset;
       uint32_t randNum = (randseed & shifter) >> offset;
       offset++;
-      if(offset == 31){offset = 0;}
+      if(offset == 29){offset = 0;}
       return randNum;
 }
 
 int rollRandom4(void)
 {
-//    RandomAddEntropy(SysTickValueGet());
-//    return RandomSeed()&0x03;
-//    srand(time(0));
-//    return rand()%4;
-//    uint32_t currentTime = TimerValueGet(TIMER0_BASE, TIMER_A);
-//    uint32_t bit0 = (currentTime & 0x02) >> 1;
-//    uint32_t bit1 = (currentTime & 0x04) >> 1;
-//    uint32_t result = bit0 + bit1;
-//    return result;
       uint32_t shifter = 0x01 << offset;
       uint32_t bit0 = (randseed & shifter) >> offset;
       shifter = shifter << 1;
       uint32_t bit1 = (randseed & shifter) >> offset;
       offset++;
-      if(offset == 30){offset = 0;}
+      if(offset == 29){offset = 0;}
       uint32_t randNum = bit0 + bit1;
       return randNum;
+}
+
+int rollRandom8(void)
+{
+      uint32_t shifter = 0x01 << offset;
+      uint32_t bit0 = (randseed & shifter) >> offset;
+      shifter = shifter << 1;
+      uint32_t bit1 = (randseed & shifter) >> offset;
+      shifter = shifter << 1;
+      uint32_t bit2 = (randseed & shifter) >> offset;
+      offset++;
+      if(offset == 29){offset = 0;}
+      uint32_t randNum = bit0 + bit1 + bit2;
+      return randNum;
+}
+
+int rollRandom9(void){
+    if(coinFlip() && coinFlip() && coinFlip()){
+        return 8;
+    }
+    else{
+        return rollRandom8();
+    }
 }
 
 void placePiece(int pos){
@@ -695,7 +716,7 @@ void playOutTiedGame(void)
     humanTurn();//turn 5
     if (robotWinningMove() == 1)
     {
-        UARTprintf("robot won the game\n");
+        //UARTprintf("robot won the game\n");
         //turn 6
         gameOver();
     }
@@ -922,8 +943,109 @@ void flashWinner7seg(int player){
     }
 }
 
-//void timer_init(void){
-//    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
-//    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);   // 32 bits Timer
-//    TimerEnable(TIMER0_BASE, TIMER_A);
-//}
+void easyMode(void){
+
+    int turnCount = 0;
+
+    if(robotWonFlip){ // robot goes first
+        displayH_OR_R_7SEG(ROBOT);
+        placePiece(rollRandom9());
+        turnCount++;
+        while(1){
+            if(turnCount == 9){gameOver();}
+            if(determine_winner() != -1){
+                gameOver();
+            }
+            humanTurn();
+
+            turnCount++;
+            if(turnCount == 9){gameOver();}
+            if(determine_winner() != -1){
+                gameOver();
+            }
+            if(robotWinningMove()){gameOver();}
+            if(!blockHuman()){
+                int setupPos = findSetupForWin();
+
+
+                if(setupPos != -1){
+                    placePiece(setupPos);
+                }
+                else{
+                    findRandomOpenSpot();
+                }
+            }
+            turnCount++;
+        }
+
+
+    }
+    else{ //human goes first
+        turnCount = 0;
+        while(1){
+            if(turnCount == 9){gameOver();}
+            if(determine_winner() != -1){
+                gameOver();
+            }
+            humanTurn();
+
+            turnCount++;
+            if(turnCount == 9){gameOver();}
+            if(determine_winner() != -1){
+                gameOver();
+            }
+            if(robotWinningMove()){gameOver();}
+            if(!blockHuman()){
+                int setupPos = findSetupForWin();
+
+
+                if(setupPos != -1){
+                    placePiece(setupPos);
+                }
+                else{
+                    findRandomOpenSpot();
+                }
+            }
+            turnCount++;
+
+
+        }
+
+    }
+
+}
+
+
+
+
+void challengeMode(void){
+
+}
+
+int findSetupForWin(void){
+    int gameBoardCopy[9];
+    int i;
+    for(i = 0; i < 9; i++){
+        gameBoardCopy[i] = gameBoard[i];
+    }
+    for(i = 0; i < 9; i++){
+        if(gameBoard[i] == -1){
+            gameBoard[i] = X;
+            if(whereCanPlayerWin(X) != -1){
+              int j;
+              for(j = 0; j < 9; j++){
+                  gameBoard[j] = gameBoardCopy[j];
+              }
+                return i;
+            }
+            else{
+                gameBoard[i] = -1;
+            }
+        }
+    }
+    for(i = 0; i < 9; i++){
+        gameBoard[i] = gameBoardCopy[i];
+    }
+    return -1;
+}
+

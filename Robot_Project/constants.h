@@ -13,6 +13,10 @@
 #define ROBOT 1
 #define TIE 2
 
+#define NO_SELECTION
+#define EASY 1
+#define DIFFICULT 2
+
 // Time delays
 #define SHORTDELAY 7500000
 #define MEDDELAY 15000000
