@@ -13,7 +13,12 @@
 #define ROBOT 1
 #define TIE 2
 
-#define NO_SELECTION
+#define PLAYER1 5
+#define PLAYER2 6
+
+#define P_selection 3
+#define d_selection 4
+
 #define EASY 1
 #define DIFFICULT 2
 

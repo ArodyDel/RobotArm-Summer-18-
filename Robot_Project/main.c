@@ -45,13 +45,14 @@ float TrigSensor(void);
 void displayH_OR_R_7SEG(int);
 void flashWinner7seg(int);
 void easyMode(void);
-void challengeMode(void);
+void difficultMode(void);
 int findSetupForWin(void);
 int rollRandom8(void);
 int rollRandom9(void);
 void humanVsHuman(void);
 void humanVsRobot(void);
-
+void waitForceSensor(void);
+void display_on_7SEG(int);
 
 extern void movement_setup(void);
 extern void moveBlock(int position);
@@ -71,225 +72,382 @@ int startNewGameSelected = 0;
 uint32_t ui32Value;
 uint32_t randseed;
 int offset = 0;
+int PlayersSelected = 0;
+int currentNumPlayerSelection = 2;
+int difficultySelected = 0;
+int currentDifficultySelection = DIFFICULT;
+int currentPlayer = PLAYER1;
+int leftButtonPushed = 0;
 
-int rightButtonCounter = 0;
 
 int main(void)
 {
-
     movement_setup();
     force_sensor_setup();
-
-    randseed = 0;
-    while(TrigSensor() > 10000){
-        randseed++;
-        if(randseed == 3000000000){
-            randseed = 0;
-        }
-    }
-
     button_setup();
 
+    display_on_7SEG(P_selection);
+    while(PlayersSelected == 0){
+        // wait for human to select number of players
+    }
+    if(PlayersSelected == 1){ // HUMAN VS ROBOT
+        display_on_7SEG(d_selection);
+        while(difficultySelected == 0){
+            // wait for human to select difficulty level
+        }
+        if(difficultySelected == EASY){
+            waitForceSensor();
+            robotWonFlip = coinFlip();
+            easyMode();
+        }
+        else{ // DIFFICULT
+            waitForceSensor();
+            robotWonFlip = coinFlip();
+            difficultMode();
+        }
+    }
+    else{ // PLAYER2 (HUMAN VS HUMAN)
+        robotWonFlip = 1; // this ensures proper X and O placement on the physical board
+        humanVsHuman();
+    }
+
+    return 0;
+}
+
+void humanVsHuman(void){
+    int turnCount = 0;
+    while(turnCount != 9 && determine_winner() == -1){
+        display_on_7SEG(currentPlayer);
+        humanTurn();
+        turnCount++;
+        if(currentPlayer == PLAYER1){currentPlayer = PLAYER2;}
+        else{currentPlayer = PLAYER1;}
+    }
+    gameOver();
+}
+
+// interrupt service routine
+void onButtonDown(void) {
+
+    if (GPIOIntStatus(GPIO_PORTF_BASE, false) & GPIO_PIN_4) {       //sw1 button handler
+        leftButtonPushed = 1;
+        if(PlayersSelected == 0){
+            if(currentNumPlayerSelection == 2){currentNumPlayerSelection = 1;}
+            else{currentNumPlayerSelection = 2;}
+            display_on_7SEG(currentNumPlayerSelection);
+        }
+        else if(difficultySelected == 0 && PlayersSelected != 2){
+            if(currentDifficultySelection == DIFFICULT){currentDifficultySelection = EASY;}
+            else{currentDifficultySelection = DIFFICULT;}
+            display_on_7SEG(currentDifficultySelection);
+        }
+        else{
+            if(count == 8){count = -1;}
+            if(gameBoard[count + 1] == -1){
+                count++;
+            }
+            else{
+                int i = 0;
+                count++;
+                while(gameBoard[count] != -1){
+                    count++;
+                    i++;
+                    if(count > 8){count = -1;}
+                    if(i == 9) { break;}
+                }
+                if(i == 9) { initialize();}
+            }
+
+            switch (count)
+            {
+            case 0:
+                Mask7seg=0x3F;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            case 1:
+                Mask7seg=0x06;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            case 2:
+                Mask7seg=0x5B;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            case 3:
+                Mask7seg=0x4F;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            case 4:
+                Mask7seg=0x66;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            case 5:
+                Mask7seg=0x6D;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            case 6:
+                Mask7seg=0x7D;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            case 7:
+                Mask7seg=0x07;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            case 8:
+                Mask7seg=0x7F;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            case 9:
+                Mask7seg=0x67;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            default:
+                Mask7seg=0x40;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+                break;
+            }
+        }
 
 
-    robotWonFlip = coinFlip(); // coinFlip returning a 1 means robot won, and is assigned X in Tic Tac Toe, else is assigned O.
+        SysCtlDelay(4000000); //delay
+        GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_4);  // Clear interrupt flag
 
-    //easyMode();
+    }
+    else if (GPIOIntStatus(GPIO_PORTF_BASE, false) & GPIO_PIN_0) {       // sw2 interrupt handle
+
+        if(leftButtonPushed == 1){
+            if(PlayersSelected == 0){
+                PlayersSelected = currentNumPlayerSelection;
+                leftButtonPushed = 0;
+            }
+            else if(difficultySelected == 0 && PlayersSelected != 2){
+                difficultySelected = currentDifficultySelection;
+                leftButtonPushed = 0;
+            }
+            else{
+                Mask7seg=0x40;
+                GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                             GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+
+                if(gameBoard[count] == -1){
+                    placePiece(count);
+                    humanTurnDone = 1;
+                    leftButtonPushed = 0;
+                }
+            }
+        }
+
+        SysCtlDelay(4000000);
+        GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_0);  // Clear interrupt flag
+    }
+}
+
+void difficultMode(void){
 
     if(robotWonFlip){ // robot goes first
 
-      displayH_OR_R_7SEG(ROBOT);
+        displayH_OR_R_7SEG(ROBOT);
 
-      if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
-         placePiece(POS4);//turn 1
-         humanTurn(); //turn 2
-         int humanTurn2Pos = count;
+        if(coinFlip()){ // if coinFlip == 1, robot plays first X in center of gameBoard
+            placePiece(POS4);//turn 1
+            humanTurn(); //turn 2
+            int humanTurn2Pos = count;
 
-        if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
-        {
-          int saveTurn3Move;
-          if(humanTurn2Pos==8)
-          {
-          placePiece(POS0);
-          saveTurn3Move=POS0;
-          }
-          else
-          {
-          placePiece(humanTurn2Pos+2);
-          saveTurn3Move=humanTurn2Pos+2;
-          }
-          humanTurn();//turn4
-          int humanTurn4Pos=0;
-          humanTurn4Pos=count;
-          if(humanTurn4Pos==0||humanTurn4Pos==2||humanTurn4Pos==6||humanTurn4Pos==8)
-          {
-            if(robotWinningMove())
-              {
+            if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
+            {
+                int saveTurn3Move;
+                if(humanTurn2Pos==8)
+                {
+                    placePiece(POS0);
+                    saveTurn3Move=POS0;
+                }
+                else
+                {
+                    placePiece(humanTurn2Pos+2);
+                    saveTurn3Move=humanTurn2Pos+2;
+                }
+                humanTurn();//turn4
+                int humanTurn4Pos=0;
+                humanTurn4Pos=count;
+                if(humanTurn4Pos==0||humanTurn4Pos==2||humanTurn4Pos==6||humanTurn4Pos==8)
+                {
+                    if(robotWinningMove())
+                    {
+                        gameOver();
+                    }
+                    else
+                    {
+                        blockHuman();//turn 5
+                    }
+                    humanTurn();//turn 6
+                    if(findRandomOpenSpot()){
+                        gameOver();
+                    }//turn 7
+                    humanTurn();//turn 8
+                    findRandomOpenSpot();//turn 9
                     gameOver();
-              }
+
+                }
+                else if(humanTurn4Pos==1||humanTurn4Pos==3||humanTurn4Pos==5||humanTurn4Pos==7)
+                {
+                    if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
+                    {
+                        if(robotWinningMove())
+                        {
+                            gameOver();
+                        }
+                        else{
+                            blockHuman();
+                        }
+
+                        humanTurn();
+                        if(robotWinningMove())
+                        {
+                            gameOver();
+                        }
+
+
+                    }
+                    else{
+                        setupCenterTrap(saveTurn3Move);
+                    }
+                    humanTurn();
+                    robotWinningMove();
+                    gameOver();
+                }
+
+
+
+            }
+
             else
             {
-              blockHuman();//turn 5
+                placePiece(POS8);
             }
+            humanTurn();//turn 4;
+
+            if(robotWinningMove())
+            {
+                gameOver();
+
+            }
+            else{
+                blockHuman();
+            }
+
+
             humanTurn();//turn 6
-            if(findRandomOpenSpot()){
-              gameOver();
-            }//turn 7
-            humanTurn();//turn 8
-            findRandomOpenSpot();//turn 9
-            gameOver();
 
-          }
-          else if(humanTurn4Pos==1||humanTurn4Pos==3||humanTurn4Pos==5||humanTurn4Pos==7)
-          {
-                if(humanTurn2Pos==0||humanTurn2Pos==2||humanTurn2Pos==6||humanTurn2Pos==8)
-                {
-                  if(robotWinningMove())
-                  {
-                    gameOver();
-                  }
-                  else{
-                    blockHuman();
-                  }
+            if(robotWinningMove())
+            {
+                gameOver();
+            }
+        }
+        else{ // robot plays first X in position 0 (lower left corner of gameBoard)
 
-                  humanTurn();
-                  if(robotWinningMove())
-                  {
-                    gameOver();
-                  }
+            placePiece(POS6);//turn 1
+            humanTurn();
+            int humanTurn2Pos=0;
+            humanTurn2Pos=count;
 
 
-                }
-                else{
-                  setupCenterTrap(saveTurn3Move);
-                }
+            if(humanTurn2Pos==1||humanTurn2Pos==7||humanTurn2Pos==8) //turn 2 played position 1,7,or8
+            {
+
+                placePiece(POS0);
                 humanTurn();
-                robotWinningMove();
-                gameOver();
-          }
-
-
-
-        }
-
-        else
-        {
-          placePiece(POS8);
-        }
-       humanTurn();//turn 4;
-
-       if(robotWinningMove())
-        {
-                   gameOver();
-
-       }
-       else{
-         blockHuman();
-       }
-
-
-       humanTurn();//turn 6
-
-       if(robotWinningMove())
-        {
-                   gameOver();
-        }
-      }
-      else{ // robot plays first X in position 0 (lower left corner of gameBoard)
-
-         placePiece(POS6);//turn 1
-         humanTurn();
-         int humanTurn2Pos=0;
-         humanTurn2Pos=count;
-
-
-          if(humanTurn2Pos==1||humanTurn2Pos==7||humanTurn2Pos==8) //turn 2 played position 1,7,or8
-             {
-
-                 placePiece(POS0);
-                 humanTurn();
-                  //check can i win
-               //if true
-               if(gameBoard[3]!=O)
-               {
-                 placePiece(POS3);
-                 gameOver();
+                //check can i win
+                //if true
+                if(gameBoard[3]!=O)
+                {
+                    placePiece(POS3);
+                    gameOver();
                 }
 
-               //if not true
+                //if not true
                 else{ placePiece(POS8);}
-                 humanTurn();
-                 if(gameBoard[4]==O)
-                 {
-                 placePiece(POS7);
-                 }
-                 else{placePiece(POS4);}
-                 gameOver();
-
-             }
-             else if(humanTurn2Pos==4) //turn 2 played center
-             {
-                 placePiece(2);//turn3
-                 humanTurn();//turn4
-                 if(gameBoard[0]==O)
-                 {
-                   placePiece(8);
-                 }
-                 else if(gameBoard[8]==O)
-                 {
-                   placePiece(0);
-                 }
-                 else
-                 {
-                   //block human
-                   blockHuman();
-                 }
-                 humanTurn();//turn 6
-                 if(robotWinningMove())
-                 {
-                   gameOver();
-                 }
-                 else
-                 {
-                   blockHuman();
-                 }
-
-                 humanTurn();//turn8
-                 if(robotWinningMove())
-                 {
-                   gameOver();
-                 }
-                 else
-                 {
-                   blockHuman();
-                 }
+                humanTurn();
+                if(gameBoard[4]==O)
+                {
+                    placePiece(POS7);
+                }
+                else{placePiece(POS4);}
                 gameOver();
 
-             }
-             else //turn 2 played any other spot
-             {
-                 placePiece(POS8);//turn 3
-                 humanTurn();//turn 4
+            }
+            else if(humanTurn2Pos==4) //turn 2 played center
+            {
+                placePiece(2);//turn3
+                humanTurn();//turn4
+                if(gameBoard[0]==O)
+                {
+                    placePiece(8);
+                }
+                else if(gameBoard[8]==O)
+                {
+                    placePiece(0);
+                }
+                else
+                {
+                    //block human
+                    blockHuman();
+                }
+                humanTurn();//turn 6
+                if(robotWinningMove())
+                {
+                    gameOver();
+                }
+                else
+                {
+                    blockHuman();
+                }
+
+                humanTurn();//turn8
+                if(robotWinningMove())
+                {
+                    gameOver();
+                }
+                else
+                {
+                    blockHuman();
+                }
+                gameOver();
+
+            }
+            else //turn 2 played any other spot
+            {
+                placePiece(POS8);//turn 3
+                humanTurn();//turn 4
                 //check can i win
 
-               //if true
-               if(gameBoard[7]!=O)
-               {
-                 placePiece(POS7);//turn 5
-                 gameOver();
-               }
+                //if true
+                if(gameBoard[7]!=O)
+                {
+                    placePiece(POS7);//turn 5
+                    gameOver();
+                }
 
-               //if not true
-                 placePiece(POS2);//turn 5
-                 humanTurn();//turn 6
-                 if(gameBoard[4]==O)
-                 {
-                 placePiece(POS5);//turn 7
-                 }
-                 placePiece(POS4);//turn 7
-                 gameOver();
-              }
-      }
+                //if not true
+                placePiece(POS2);//turn 5
+                humanTurn();//turn 6
+                if(gameBoard[4]==O)
+                {
+                    placePiece(POS5);//turn 7
+                }
+                placePiece(POS4);//turn 7
+                gameOver();
+            }
+        }
     }
     else{ // human goes first
         displayH_OR_R_7SEG(HUMAN);
@@ -380,133 +538,25 @@ int main(void)
                 playOutTiedGame();
             }
         }
-
-
-
-
-    }
-    return 0;
-}
-
-// interrupt service routine
-void onButtonDown(void) {
-
-
-
-    if (GPIOIntStatus(GPIO_PORTF_BASE, false) & GPIO_PIN_4) {       //sw1 button handler
-//        GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
-//        UARTprintf("\nI am in button 1\n");
-        // PF4 was interrupt cause
-        //UARTprintf("Button Down\n");
-        //TrigSensor();
-        // Configure PF4 for rising edge trigger
-
-        //GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
-
-        if(count == 8){count = -1;}
-        if(gameBoard[count + 1] == -1){
-            count++;
-        }
-        else{
-            int i = 0;
-            count++;
-            while(gameBoard[count] != -1){
-                count++;
-                i++;
-                if(count > 8){count = -1;}
-                if(i == 9) { break;}
-            }
-            if(i == 9) { initialize();}
-        }
-
-        switch (count)
-        {
-        case 0:
-            Mask7seg=0x3F;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        case 1:
-            Mask7seg=0x06;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        case 2:
-            Mask7seg=0x5B;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        case 3:
-            Mask7seg=0x4F;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        case 4:
-            Mask7seg=0x66;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        case 5:
-            Mask7seg=0x6D;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        case 6:
-            Mask7seg=0x7D;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        case 7:
-            Mask7seg=0x07;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        case 8:
-            Mask7seg=0x7F;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        case 9:
-            Mask7seg=0x67;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        default:
-            Mask7seg=0x40;
-            GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                         GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-            break;
-        }
-
-//        GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
-        SysCtlDelay(4000000); //delay
-        GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_4);  // Clear interrupt flag
-        //humanTurnDone = 1;
-
-    }
-    else if (GPIOIntStatus(GPIO_PORTF_BASE, false) & GPIO_PIN_0) {       // sw2 interrupt handle
-        //rightButtonCounter++;
-//        UARTprintf("\n%d\n", rightButtonCounter);
-
-//        GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
-//        UARTprintf("\nI am at button 2\n");
-
-        Mask7seg=0x40;
-        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
-                                                                   GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
-
-        if(gameBoard[count] == -1){
-            placePiece(count);
-            humanTurnDone = 1;
-        }
-
-
-//        GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
-        SysCtlDelay(4000000);
-        GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_0);  // Clear interrupt flag
-
     }
 }
+
+void waitForceSensor(void){
+    GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+    randseed = 0;
+
+    while(TrigSensor() > -3000){
+
+        randseed++;
+        if(randseed == 3000000000){
+            randseed = 0;
+        }
+        GPIOIntClear(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+    }
+    GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+}
+
+
 
 void button_setup(void){
     SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
@@ -530,7 +580,7 @@ void button_setup(void){
     GPIOIntRegister(GPIO_PORTF_BASE, onButtonDown);     // Register our handler function for port F
     GPIOIntTypeSet(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0,
                    GPIO_FALLING_EDGE);             // Configure PF4 for falling edge trigger
-//    GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
+    GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
 }
 
 float TrigSensor(void)
@@ -542,7 +592,7 @@ float TrigSensor(void)
     }
     ADCSequenceDataGet(ADC0_BASE, 0, &ui32Value); // read data
     float FsrVolt=ui32Value*5/1023.0;
-    float FsrResist=3270.0*(5/FsrVolt-1.0); //voltage divider using a 3270 ohm resistor
+    float FsrResist=10000.0*(5/FsrVolt-1.0); //voltage divider using a 3270 ohm resistor
     float FsrG=1.0/FsrResist;
     float force;
     if(FsrResist<=600)
@@ -554,8 +604,9 @@ float TrigSensor(void)
         force=FsrG/0.000000642857;
     }
     float test = 65.0004;
+       // UARTprintf("Resistance: %d ohms \n",(int)FsrResist);
     return FsrResist;
-//    UARTprintf("Resistance: %d ohms \n",(int)FsrResist);
+
 //    UARTprintf("Resistance: %d g\n",(int)force);
 }
 
@@ -646,14 +697,19 @@ void print_winner(void){
 
 
 void humanTurn(void){
-    displayH_OR_R_7SEG(HUMAN);
+    if(PlayersSelected == 1){
+        displayH_OR_R_7SEG(HUMAN);
+    }
     GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     while(!humanTurnDone){ //wait on human to take their turn
         //GPIOIntEnable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     }
     GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     humanTurnDone=0;     // reset flag
-    displayH_OR_R_7SEG(ROBOT);
+
+    if(PlayersSelected == 1){
+        displayH_OR_R_7SEG(ROBOT);
+    }
 }
 
 int determine_winner(void){
@@ -894,10 +950,12 @@ void gameOver(void){
       flashWinner7seg(TIE);
   }
   else if(winner == X){
-      flashWinner7seg(ROBOT);
+      if(PlayersSelected == 1){flashWinner7seg(ROBOT);}
+      else{flashWinner7seg(PLAYER1);}
   }
   else if(winner == O){
-      flashWinner7seg(HUMAN);
+      if(PlayersSelected == 1){flashWinner7seg(HUMAN);}
+      else{flashWinner7seg(PLAYER2);}
   }
   while(1){/*waiting for reset button press*/}
 }
@@ -932,9 +990,49 @@ void displayH_OR_R_7SEG(int player){
     }
 }
 
+void display_on_7SEG(int selection){
+    switch(selection){
+    case 1:
+        Mask7seg=0x06;
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+    case 2:
+        Mask7seg=0x5B;
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+
+    case P_selection:
+        Mask7seg=0x73;
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+    case d_selection:
+        Mask7seg=0x5e;
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+    case PLAYER1:
+        Mask7seg=0x77;
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+    case PLAYER2:
+        Mask7seg=0x7c;
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+    default:
+        break;
+
+    }
+}
+
 void flashWinner7seg(int player){
     while(1){
-        displayH_OR_R_7SEG(player);
+        if(PlayersSelected == 1){displayH_OR_R_7SEG(player);}
+        else{display_on_7SEG(player);}
         SysCtlDelay(2500000);
         Mask7seg=0x00;
         GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
@@ -944,6 +1042,7 @@ void flashWinner7seg(int player){
 }
 
 void easyMode(void){
+
 
     int turnCount = 0;
 
@@ -1012,13 +1111,6 @@ void easyMode(void){
         }
 
     }
-
-}
-
-
-
-
-void challengeMode(void){
 
 }
 
