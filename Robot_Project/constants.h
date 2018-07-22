@@ -16,8 +16,9 @@
 #define PLAYER1 5
 #define PLAYER2 6
 
-#define P_selection 3
-#define d_selection 4
+#define P_SELECTION 3
+#define D_SELECTION 4
+#define LETTER_C 7
 
 #define EASY 1
 #define DIFFICULT 2

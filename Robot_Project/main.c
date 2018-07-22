@@ -86,12 +86,12 @@ int main(void)
     force_sensor_setup();
     button_setup();
 
-    display_on_7SEG(P_selection);
+    display_on_7SEG(P_SELECTION);
     while(PlayersSelected == 0){
         // wait for human to select number of players
     }
     if(PlayersSelected == 1){ // HUMAN VS ROBOT
-        display_on_7SEG(d_selection);
+        display_on_7SEG(D_SELECTION);
         while(difficultySelected == 0){
             // wait for human to select difficulty level
         }
@@ -544,6 +544,8 @@ void difficultMode(void){
 void waitForceSensor(void){
     GPIOIntDisable(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0);
     randseed = 0;
+
+    display_on_7SEG(LETTER_C);
 
     while(TrigSensor() > -3000){
 
@@ -1003,12 +1005,12 @@ void display_on_7SEG(int selection){
                      GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
         break;
 
-    case P_selection:
+    case P_SELECTION:
         Mask7seg=0x73;
         GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
                      GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
         break;
-    case d_selection:
+    case D_SELECTION:
         Mask7seg=0x5e;
         GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
                      GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
@@ -1020,6 +1022,11 @@ void display_on_7SEG(int selection){
         break;
     case PLAYER2:
         Mask7seg=0x7c;
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                     GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
+    case LETTER_C:
+        Mask7seg=0x58;
         GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
                      GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
         break;
