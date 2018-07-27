@@ -1030,16 +1030,21 @@ void display_on_7SEG(int selection){
         GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
                      GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
         break;
+		case TIE:
+        Mask7seg=0x41;  // Display r on 7 seg when it's the human's turn
+        GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+                    GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,Mask7seg );
+        break;
     default:
         break;
 
     }
 }
 
-void flashWinner7seg(int player){
+void flashWinner7seg(int segValues){
     while(1){
-        if(PlayersSelected == 1){displayH_OR_R_7SEG(player);}
-        else{display_on_7SEG(player);}
+        if(PlayersSelected == 1){displayH_OR_R_7SEG(segValues);}
+        else{display_on_7SEG(segValues);}
         SysCtlDelay(2500000);
         Mask7seg=0x00;
         GPIOPinWrite(GPIO_PORTB_BASE,GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |

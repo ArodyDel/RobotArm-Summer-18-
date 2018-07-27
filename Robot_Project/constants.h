@@ -11,7 +11,8 @@
 
 #define HUMAN 0
 #define ROBOT 1
-#define TIE 2
+#define TIE 12 
+
 
 #define PLAYER1 5
 #define PLAYER2 6
